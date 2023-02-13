@@ -5,7 +5,8 @@
   "require": {
     "php": "^7.4|^8.0|^8.1",
     "darkaonline/l5-swagger": "8.1.0",
-    "escolalms/core": "^0",
+    "escolalms/auth": "^0",
+    "escolalms/core": "^1",
     "laravel/framework": "^8|^9"
   },
   "require-dev": {

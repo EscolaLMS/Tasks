@@ -3,11 +3,25 @@
 namespace EscolaLms\Tasks;
 
 use EscolaLms\Tasks\Providers\AuthServiceProvider;
+use EscolaLms\Tasks\Repositories\Contracts\TaskRepositoryContract;
+use EscolaLms\Tasks\Repositories\TaskRepository;
+use EscolaLms\Tasks\Services\Contracts\TaskServiceContract;
+use EscolaLms\Tasks\Services\TaskService;
 use Illuminate\Support\ServiceProvider;
 
 class EscolaLmsTasksServiceProvider extends ServiceProvider
 {
     const CONFIG_KEY = 'escolalms_tasks';
+
+    public const REPOSITORIES = [
+        TaskRepositoryContract::class => TaskRepository::class,
+    ];
+
+    public const SERVICES = [
+        TaskServiceContract::class => TaskService::class
+    ];
+
+    public $singletons = self::SERVICES + self::REPOSITORIES;
 
     public function register()
     {
