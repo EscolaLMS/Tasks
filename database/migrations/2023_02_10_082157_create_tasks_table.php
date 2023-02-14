@@ -14,8 +14,8 @@ class CreateTasksTable extends Migration
             $table->text('note')->nullable();
             $table->dateTime('due_date')->nullable();
             $table->dateTime('completed_at')->nullable();
-            $table->foreignId('user_id')->nullable()->constrained('users');
-            $table->foreignId('created_by_id')->nullable()->constrained('users');
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('created_by_id')->constrained('users');
             $table->morphs('related');
             $table->timestamps();
         });
