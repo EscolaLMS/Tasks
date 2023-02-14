@@ -4,21 +4,22 @@ namespace EscolaLms\Tasks\Tests;
 
 use Carbon\Carbon;
 use EscolaLms\Core\Models\User;
-use Faker\Factory;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
 
 trait TaskTesting
 {
+    use WithFaker;
+
     public function userCreationPayload(?array $data = []): array
     {
-        $faker = Factory::create();
-        $type = Str::ucfirst($faker->word) . $faker->numberBetween();
+        $type = Str::ucfirst($this->faker->word) . $this->faker->numberBetween();
 
         $payload = [
-            'title' => $faker->word,
+            'title' => $this->faker->word,
             'due_date' => Carbon::now()->addDay(),
             'related_type' => 'EscolaLms\\' . $type . '\\Models\\' . $type,
-            'related_id' => $faker->randomNumber(),
+            'related_id' => $this->faker->randomNumber(),
         ];
 
         return array_merge($payload, $data);
@@ -26,16 +27,15 @@ trait TaskTesting
 
     public function adminCreationPayload(?array $data = []): array
     {
-        $faker = Factory::create();
-        $type = Str::ucfirst($faker->word) . $faker->numberBetween();
+        $type = Str::ucfirst($this->faker->word) . $this->faker->numberBetween();
 
         $payload = [
-            'title' => $faker->word,
-            'note' => $faker->word,
-            'user_id' => User::factory()->create()->getKey(),
+            'title' => $this->faker->word,
+            'note' => $this->faker->word,
+            'user_id' => User::factory()->create(['email' => $this->faker->email . Carbon::now()->getTimestamp()])->getKey(),
             'due_date' => Carbon::now()->addDay(),
             'related_type' => 'EscolaLms\\' . $type . '\\Models\\' . $type,
-            'related_id' => $faker->randomNumber(),
+            'related_id' => $this->faker->randomNumber(),
         ];
 
         return array_merge($payload, $data);

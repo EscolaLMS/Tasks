@@ -83,7 +83,7 @@ class TaskCreateApiTest extends TestCase
     public function testUserCreateTaskInvalidData(string $key, array $data): void
     {
         $this->actingAs($this->makeStudent(), 'api')
-            ->postJson('api/tasks', $data)
+            ->postJson('api/tasks', $this->userCreationPayload($data))
             ->assertUnprocessable()
             ->assertJsonValidationErrors([$key]);
     }
@@ -129,7 +129,7 @@ class TaskCreateApiTest extends TestCase
     public function testAdminCreateTaskInvalidData(string $key, array $data): void
     {
         $this->actingAs($this->makeAdmin(), 'api')
-            ->postJson('api/admin/tasks', $data)
+            ->postJson('api/admin/tasks', $this->adminCreationPayload($data))
             ->assertUnprocessable()
             ->assertJsonValidationErrors([$key]);
 
@@ -152,10 +152,10 @@ class TaskCreateApiTest extends TestCase
     public function userInvalidDataProvider(): array
     {
         return [
-            ['field' => 'title', 'data' => $this->userCreationPayload(['title' => null])],
-            ['field' => 'due_date', 'data' => $this->userCreationPayload(['due_date' => Carbon::now()->subDay()])],
-            ['field' => 'related_type', 'data' => $this->userCreationPayload(['related_type' => 123])],
-            ['field' => 'related_id', 'data' => $this->userCreationPayload(['related_id' => 'String'])],
+            ['field' => 'title', 'data' => ['title' => null]],
+            ['field' => 'due_date', 'data' => ['due_date' => Carbon::now()->subDay()]],
+            ['field' => 'related_type', 'data' => ['related_type' => 123]],
+            ['field' => 'related_id', 'data' => ['related_id' => 'String']],
         ];
     }
 
@@ -163,12 +163,12 @@ class TaskCreateApiTest extends TestCase
     public function adminInvalidDataProvider(): array
     {
         return [
-            ['field' => 'title', 'data' => $this->adminCreationPayload(['title' => null])],
-            ['field' => 'due_date', 'data' => $this->adminCreationPayload(['due_date' => Carbon::now()->subDay()])],
-            ['field' => 'user_id', 'data' => $this->adminCreationPayload(['user_id' => -123])],
-            ['field' => 'user_id', 'data' => $this->adminCreationPayload(['user_id' => null])],
-            ['field' => 'related_type', 'data' => $this->adminCreationPayload(['related_type' => 123])],
-            ['field' => 'related_id', 'data' => $this->adminCreationPayload(['related_id' => 'String'])],
+            ['field' => 'title', 'data' => ['title' => null]],
+            ['field' => 'due_date', 'data' => ['due_date' => Carbon::now()->subDay()]],
+            ['field' => 'user_id', 'data' => ['user_id' => -123]],
+            ['field' => 'user_id', 'data' => ['user_id' => null]],
+            ['field' => 'related_type', 'data' => ['related_type' => 123]],
+            ['field' => 'related_id', 'data' => ['related_id' => 'String']],
         ];
     }
 }

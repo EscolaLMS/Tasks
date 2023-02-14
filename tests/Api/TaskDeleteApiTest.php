@@ -3,7 +3,6 @@
 namespace EscolaLms\Tasks\Tests\Api;
 
 use EscolaLms\Tasks\Database\Seeders\TaskPermissionSeeder;
-use EscolaLms\Tasks\Events\TaskAssignedEvent;
 use EscolaLms\Tasks\Events\TaskDeletedEvent;
 use EscolaLms\Tasks\Models\Task;
 use EscolaLms\Tasks\Tests\CreatesUsers;
