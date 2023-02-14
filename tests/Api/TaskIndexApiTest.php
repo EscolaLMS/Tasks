@@ -295,8 +295,4 @@ class TaskIndexApiTest extends TestCase
         $this->getJson('api/admin/tasks')
             ->assertUnauthorized();
     }
-
-
-
-
 }

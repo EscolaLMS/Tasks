@@ -151,7 +151,6 @@ class TaskCreateApiTest extends TestCase
 
     public function userInvalidDataProvider(): array
     {
-        $this->createApplication();
         return [
             ['field' => 'title', 'data' => $this->userCreationPayload(['title' => null])],
             ['field' => 'due_date', 'data' => $this->userCreationPayload(['due_date' => Carbon::now()->subDay()])],
@@ -163,8 +162,6 @@ class TaskCreateApiTest extends TestCase
 
     public function adminInvalidDataProvider(): array
     {
-        $this->createApplication();
-
         return [
             ['field' => 'title', 'data' => $this->adminCreationPayload(['title' => null])],
             ['field' => 'due_date', 'data' => $this->adminCreationPayload(['due_date' => Carbon::now()->subDay()])],

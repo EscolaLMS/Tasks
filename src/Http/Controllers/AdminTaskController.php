@@ -27,35 +27,35 @@ class AdminTaskController extends EscolaLmsBaseController
     {
         $task = $this->taskService->create($request->toDto());
 
-        return $this->sendResponseForResource(TaskResource::make($task), 'Task created successfully.');
+        return $this->sendResponseForResource(TaskResource::make($task), __('Task created successfully.'));
     }
 
     public function update(AdminUpdateTaskRequest $request): JsonResponse
     {
         $task = $this->taskService->update($request->toDto());
 
-        return $this->sendResponseForResource(TaskResource::make($task), 'Task updated successfully.');
+        return $this->sendResponseForResource(TaskResource::make($task), __('Task updated successfully.'));
     }
 
     public function delete(AdminDeleteTaskRequest $request): JsonResponse
     {
         $this->taskService->delete($request->getId());
 
-        return $this->sendSuccess('Task deleted successfully.');
+        return $this->sendSuccess(__('Task deleted successfully.'));
     }
 
     public function complete(AdminCompleteTaskRequest $request): JsonResponse
     {
         $task = $this->taskService->complete($request->getId());
 
-        return $this->sendResponseForResource(TaskResource::make($task), 'Task complete successfully.');
+        return $this->sendResponseForResource(TaskResource::make($task), __('Task complete successfully.'));
     }
 
     public function incomplete(AdminIncompleteTaskRequest $request): JsonResponse
     {
         $task = $this->taskService->incomplete($request->getId());
 
-        return $this->sendResponseForResource(TaskResource::make($task), 'Task incomplete successfully.');
+        return $this->sendResponseForResource(TaskResource::make($task), __('Task incomplete successfully.'));
     }
 
     public function findAll(AdminListTaskRequest $request): JsonResponse

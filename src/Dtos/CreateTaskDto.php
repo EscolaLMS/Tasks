@@ -37,12 +37,12 @@ class CreateTaskDto implements DtoContract, InstantiateFromRequest
         return $this->title;
     }
 
-    public function getUserId()
+    public function getUserId(): int
     {
         return $this->userId;
     }
 
-    public function getCreatedById()
+    public function getCreatedById(): int
     {
         return $this->createdById;
     }
