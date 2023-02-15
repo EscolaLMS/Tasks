@@ -43,7 +43,7 @@ class TaskCreateApiTest extends TestCase
         Event::assertNotDispatched(TaskAssignedEvent::class);
     }
 
-    public function testUserCreateTaskExceptUserIdAndNote(): void
+    public function testUserCreateTaskExceptUserId(): void
     {
         $user = $this->makeStudent();
         $payload = $this->userCreationPayload([
@@ -56,7 +56,6 @@ class TaskCreateApiTest extends TestCase
 
         $this->assertDatabaseHas('tasks', [
             'title' => $payload['title'],
-            'note' => null,
             'user_id' => $user->id,
             'created_by_id' => $user->id,
             'due_date' => $payload['due_date'],
@@ -66,7 +65,6 @@ class TaskCreateApiTest extends TestCase
 
         $this->assertDatabaseMissing('tasks', [
             'title' => $payload['title'],
-            'note' => null,
             'user_id' => $payload['user_id'],
             'created_by_id' => $user->id,
             'due_date' => $payload['due_date'],
@@ -112,7 +110,6 @@ class TaskCreateApiTest extends TestCase
 
         $this->assertDatabaseHas('tasks', [
             'title' => $payload['title'],
-            'note' => $payload['note'],
             'user_id' => $payload['user_id'],
             'created_by_id' => $user->id,
             'due_date' => $payload['due_date'],

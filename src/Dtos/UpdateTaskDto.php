@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 
 class UpdateTaskDto extends CreateTaskDto implements DtoContract, InstantiateFromRequest
 {
-
     private int $id;
 
     public function __construct(int $id, string $title, ?Carbon $dueDate, ?string $relatedType, ?int $relatedId)

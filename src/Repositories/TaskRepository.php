@@ -22,7 +22,7 @@ class TaskRepository extends BaseRepository implements TaskRepositoryContract
 
     public function findAllByUserId(int $userId, int $perPage, array $criteria): LengthAwarePaginator
     {
-        $query = $this->model->newQuery();
+        $query = $this->model->newQuery()->with('taskNotes');
         $query = $this->applyCriteria($query, $criteria);
         $query = $query->where('user_id', '=', $userId);
 
@@ -31,7 +31,7 @@ class TaskRepository extends BaseRepository implements TaskRepositoryContract
 
     public function findAll(int $perPage, array $criteria): LengthAwarePaginator
     {
-        $query = $this->model->newQuery();
+        $query = $this->model->newQuery()->with('taskNotes');
         $query = $this->applyCriteria($query, $criteria);
 
         return $query->paginate($perPage);

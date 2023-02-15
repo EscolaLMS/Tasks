@@ -44,7 +44,7 @@ class TaskUpdateApiTest extends TestCase
         ]);
     }
 
-    public function testUserUpdateTaskExceptUserIdAndNote(): void
+    public function testUserUpdateTaskExceptUserId(): void
     {
         $user = $this->makeStudent();
         $task = Task::factory()->create([
@@ -53,7 +53,6 @@ class TaskUpdateApiTest extends TestCase
         ]);
         $payload = $this->userCreationPayload([
             'user_id' => -123,
-            'note' => 'note'
         ]);
 
         $this->actingAs($user, 'api')
@@ -62,7 +61,6 @@ class TaskUpdateApiTest extends TestCase
 
         $this->assertDatabaseHas('tasks', [
             'title' => $payload['title'],
-            'note' => $task->note,
             'user_id' => $user->id,
             'created_by_id' => $user->id,
             'due_date' => $payload['due_date'],
@@ -72,7 +70,6 @@ class TaskUpdateApiTest extends TestCase
 
         $this->assertDatabaseMissing('tasks', [
             'title' => $payload['title'],
-            'note' => $payload['note'],
             'user_id' => $payload['user_id'],
             'created_by_id' => $user->id,
             'due_date' => $payload['due_date'],
@@ -123,7 +120,6 @@ class TaskUpdateApiTest extends TestCase
 
         $this->assertDatabaseHas('tasks', [
             'title' => $payload['title'],
-            'note' => $payload['note'],
             'user_id' => $payload['user_id'],
             'created_by_id' => $user->id,
             'due_date' => $payload['due_date'],

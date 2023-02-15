@@ -31,7 +31,6 @@ trait TaskTesting
 
         $payload = [
             'title' => $this->faker->word,
-            'note' => $this->faker->word,
             'user_id' => User::factory()->create(['email' => $this->faker->email . Carbon::now()->getTimestamp()])->getKey(),
             'due_date' => Carbon::now()->addDay(),
             'related_type' => 'EscolaLms\\' . $type . '\\Models\\' . $type,

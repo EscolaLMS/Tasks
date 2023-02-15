@@ -4,20 +4,21 @@ namespace EscolaLms\Tasks\Models;
 
 use Carbon\Carbon;
 use EscolaLms\Tasks\Database\Factories\TaskFactory;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
  *
- * Class Tasks
+ * Class Task
  *
  * @package EscolaLms\Tasks\Models
  *
  * @property int $id
  * @property string $title
- * @property ?string $note
  * @property ?Carbon due_date
  * @property ?Carbon $completed_at
  * @property int $user_id
@@ -27,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  *
  * @property User $user
  * @property User $createdBy
+ * @property Collection|TaskNote[] $taskNotes
  *
  */
 class Task extends Model
@@ -48,6 +50,11 @@ class Task extends Model
     public function related(): MorphTo
     {
         return $this->morphTo('related');
+    }
+
+    public function taskNotes(): HasMany
+    {
+        return $this->hasMany(TaskNote::class);
     }
 
     public function isAssigned(): bool

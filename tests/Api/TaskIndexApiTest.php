@@ -33,7 +33,6 @@ class TaskIndexApiTest extends TestCase
             ->assertJsonStructure(['data' => [[
                 'id',
                 'title',
-                'note',
                 'created_by_id',
                 'completed_at',
                 'related_type',
@@ -111,7 +110,6 @@ class TaskIndexApiTest extends TestCase
             ->assertJsonStructure(['data' => [[
                 'id',
                 'title',
-                'note',
                 'created_by_id',
                 'completed_at',
                 'related_type',
