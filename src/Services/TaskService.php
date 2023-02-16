@@ -122,6 +122,6 @@ class TaskService implements TaskServiceContract
 
     public function find(int $id): Task
     {
-        return $this->taskRepository->find($id)->load('taskNotes');
+        return $this->taskRepository->find($id)->load(['taskNotes', 'taskNotes.user']);
     }
 }

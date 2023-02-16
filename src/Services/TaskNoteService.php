@@ -4,6 +4,7 @@ namespace EscolaLms\Tasks\Services;
 
 use EscolaLms\Tasks\Dtos\CreateTaskNoteDto;
 use EscolaLms\Tasks\Dtos\UpdateTaskNoteDto;
+use EscolaLms\Tasks\Events\TaskNoteCreatedEvent;
 use EscolaLms\Tasks\Models\TaskNote;
 use EscolaLms\Tasks\Repositories\Contracts\TaskNoteRepositoryContract;
 use EscolaLms\Tasks\Services\Contracts\TaskNoteServiceContract;
@@ -22,7 +23,7 @@ class TaskNoteService implements TaskNoteServiceContract
         /** @var TaskNote $taskNote */
         $taskNote = $this->taskNoteRepository->create($dto->toArray());
 
-//        event(); // TODO
+        event(new TaskNoteCreatedEvent($taskNote->notifyTo(), $taskNote));
 
         return $taskNote;
     }

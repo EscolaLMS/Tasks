@@ -13,7 +13,6 @@ class DeleteTaskNoteRequest extends TaskNoteRequest
         $taskNote = $this->getTaskNote($this->route('id'));
         $task = $taskNote->task;
 
-        // todo
         return Gate::allows('delete', $taskNote) && $this->isTaskNoteOwner($taskNote) && ($this->isOwner($task) || $this->isAssigned($task));
     }
 

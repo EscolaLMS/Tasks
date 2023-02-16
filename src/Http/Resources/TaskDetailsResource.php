@@ -20,7 +20,7 @@ class TaskDetailsResource extends JsonResource
             'completed_at' => $this->completed_at,
             'related_type' => $this->related_type,
             'related_id' => $this->related_id,
-            'notes' => TaskNoteResource::collection($this->taskNotes->count())
+            'notes' => TaskNoteResource::collection($this->taskNotes)
         ];
     }
 }

@@ -15,7 +15,7 @@ class TaskNoteResource extends JsonResource
         return [
             'id' => $this->id,
             'note' => $this->note,
-            'user_id' => $this->user_id,
+            'user' => UserResource::make($this->user),
             'task_id' => $this->task_id,
         ];
     }

@@ -4,6 +4,7 @@ namespace EscolaLms\Tasks\Tests;
 
 use Carbon\Carbon;
 use EscolaLms\Core\Models\User;
+use EscolaLms\Tasks\Models\Task;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
 
@@ -40,7 +41,31 @@ trait TaskTesting
         return array_merge($payload, $data);
     }
 
-    private function prepareUri(string $prefix, array $filters): string {
+    public function creationTaskNotePayload(?array $data = [], ?User $user = null, ?User $createdBy = null): array
+    {
+        $user = $user ?? User::factory()->create(['email' => $this->faker->email . Carbon::now()->getTimestamp()]);
+        $createdBy = $createdBy ?? User::factory()->create(['email' => $this->faker->email . Carbon::now()->getTimestamp()]);
+        $task = Task::factory()->create(['user_id' => $user->getKey(), 'created_by_id' => $createdBy->getKey()]);
+
+        $payload = [
+            'note' => $this->faker->text,
+            'task_id' => $task->getKey(),
+        ];
+
+        return array_merge($payload, $data);
+    }
+
+    public function updateTaskNotePayload(?array $data = []): array
+    {
+        $payload = [
+            'note' => $this->faker->text,
+            'task_id' => Task::factory()->create()->getKey(),
+        ];
+
+        return array_merge($payload, $data);
+    }
+
+    public function prepareUri(string $prefix, array $filters): string {
         $uri = $prefix . '?';
 
         foreach ($filters as $key => $value) {

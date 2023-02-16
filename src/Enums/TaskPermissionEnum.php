@@ -21,5 +21,4 @@ class TaskPermissionEnum extends BasicEnum
     const CREATE_TASK_NOTE = 'task-note_create';
     const UPDATE_TASK_NOTE= 'task-note_update';
     const DELETE_TASK_NOTE = 'task-note_delete';
-    const LIST_TASK_NOTE = 'task-note_list';
 }

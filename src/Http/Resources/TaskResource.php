@@ -15,7 +15,8 @@ class TaskResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'created_by_id' => $this->created_by_id,
+            'user' => UserResource::make($this->user),
+            'created_by' => UserResource::make($this->createdBy),
             'completed_at' => $this->completed_at,
             'related_type' => $this->related_type,
             'related_id' => $this->related_id,

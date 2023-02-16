@@ -11,11 +11,6 @@ class TaskNotePolicy
 {
     use HandlesAuthorization;
 
-    public function list(User $user): bool
-    {
-        return $user->can(TaskPermissionEnum::LIST_TASK_NOTE);
-    }
-
     public function create(User $user): bool
     {
         return $user->can(TaskPermissionEnum::CREATE_TASK_NOTE);

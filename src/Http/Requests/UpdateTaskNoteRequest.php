@@ -11,10 +11,11 @@ class UpdateTaskNoteRequest extends CreateTaskNoteRequest
 {
     public function authorize(): bool
     {
-        $taskNote = $this->getTaskNote();
+        $taskNote = $this->getTaskNote(
+            $this->route('id')
+        );
         $task = $taskNote->task;
 
-        // todo sprawdzanie isOwner || isAssigned chyba jet bez sensu, a jak nie to chociaż move to isTaskNoteOwner
         return Gate::allows('update', $taskNote) && $this->isTaskNoteOwner($taskNote) && ($this->isOwner($task) || $this->isAssigned($task));
     }
 

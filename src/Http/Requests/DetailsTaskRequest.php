@@ -10,7 +10,7 @@ class DetailsTaskRequest extends TaskRequest
     {
         $task = $this->getTask();
 
-        return Gate::allows('findOwn', $task) && ($this->isOwner($task) || $this->isAssigned());
+        return Gate::allows('findOwn', $task) && ($this->isOwner($task) || $this->isAssigned($task));
     }
 
     public function getId(): ?int

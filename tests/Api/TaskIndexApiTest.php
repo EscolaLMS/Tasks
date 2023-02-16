@@ -4,6 +4,7 @@ namespace EscolaLms\Tasks\Tests\Api;
 
 use EscolaLms\Tasks\Database\Seeders\TaskPermissionSeeder;
 use EscolaLms\Tasks\Models\Task;
+use EscolaLms\Tasks\Models\TaskNote;
 use EscolaLms\Tasks\Tests\CreatesUsers;
 use EscolaLms\Tasks\Tests\TaskTesting;
 use EscolaLms\Tasks\Tests\TestCase;
@@ -33,7 +34,16 @@ class TaskIndexApiTest extends TestCase
             ->assertJsonStructure(['data' => [[
                 'id',
                 'title',
-                'created_by_id',
+                'user' => [
+                    'id',
+                    'first_name',
+                    'last_name',
+                ],
+                'created_by' => [
+                    'id',
+                    'first_name',
+                    'last_name',
+                ],
                 'completed_at',
                 'related_type',
                 'related_id',
@@ -110,7 +120,16 @@ class TaskIndexApiTest extends TestCase
             ->assertJsonStructure(['data' => [[
                 'id',
                 'title',
-                'created_by_id',
+                'user' => [
+                    'id',
+                    'first_name',
+                    'last_name',
+                ],
+                'created_by' => [
+                    'id',
+                    'first_name',
+                    'last_name',
+                ],
                 'completed_at',
                 'related_type',
                 'related_id',
@@ -291,6 +310,181 @@ class TaskIndexApiTest extends TestCase
     public function testAdminTaskIndexUnauthorized(): void
     {
         $this->getJson('api/admin/tasks')
+            ->assertUnauthorized();
+    }
+
+    public function testUserTaskDetails(): void
+    {
+        $user = $this->makeStudent();
+        $task = Task::factory()->create([
+            'user_id' => $user->getKey(),
+        ]);
+
+        $this->actingAs($user, 'api')
+            ->getJson('api/tasks/' . $task->getKey())
+            ->assertOk()
+            ->assertJsonStructure([
+                'data' => [
+                    'id',
+                    'title',
+                    'created_by_id',
+                    'completed_at',
+                    'related_type',
+                    'related_id',
+                    'notes' => []
+                ]
+            ]);
+    }
+
+    public function testUserTaskDetailsWithNotes(): void
+    {
+        $user = $this->makeStudent();
+        $task = Task::factory()
+            ->has(TaskNote::factory()->count(3)->state(['user_id' => $user]))
+            ->create(['user_id' => $user->getKey()]);
+
+        $this->actingAs($user, 'api')
+            ->getJson('api/tasks/' . $task->getKey())
+            ->assertOk()
+            ->assertJson([
+                'data' => [
+                    'id' => $task->getKey(),
+                    'notes' => [[
+                        'task_id' => $task->getKey(),
+                        'user' => [
+                            'id' => $user->getKey(),
+                        ]
+                    ]]
+                ]
+            ])
+            ->assertJsonCount(3, 'data.notes')
+            ->assertJsonStructure([
+                'data' => [
+                    'id',
+                    'title',
+                    'created_by_id',
+                    'completed_at',
+                    'related_type',
+                    'related_id',
+                    'notes' => [[
+                        'id',
+                        'note',
+                        'task_id',
+                        'user' => [
+                            'id',
+                            'first_name',
+                            'last_name',
+                        ]
+                    ]]
+                ]
+            ]);
+    }
+
+    public function testUserTaskDetailsNotOwner(): void
+    {
+        $this->actingAs($this->makeStudent(), 'api')
+            ->getJson('api/tasks/' . Task::factory()->create()->getKey())
+            ->assertForbidden();
+    }
+
+    public function testUserTaskDetailsNotFound(): void
+    {
+        $this->actingAs($this->makeStudent(), 'api')
+            ->getJson('api/tasks/123')
+            ->assertNotFound();
+    }
+
+    public function testUserTaskDetailsForbidden(): void
+    {
+        $this->actingAs($this->makeUser(), 'api')
+            ->getJson('api/tasks/' . Task::factory()->create()->getKey())
+            ->assertForbidden();
+    }
+
+    public function testUserTaskDetailsUnauthorized(): void
+    {
+        $this->getJson('api/tasks/123')
+            ->assertUnauthorized();
+    }
+
+    public function testAdminTaskDetails(): void
+    {
+        $user = $this->makeAdmin();
+        $task = Task::factory()->create();
+
+        $this->actingAs($user, 'api')
+            ->getJson('api/admin/tasks/' . $task->getKey())
+            ->assertOk()
+            ->assertJsonStructure([
+                'data' => [
+                    'id',
+                    'title',
+                    'created_by_id',
+                    'completed_at',
+                    'related_type',
+                    'related_id',
+                    'notes' => []
+                ]
+            ]);
+    }
+
+    public function testAdminTaskDetailsWithNotes(): void
+    {
+        $task = Task::factory()
+            ->has(TaskNote::factory()->count(3))
+            ->create();
+
+        $this->actingAs($this->makeAdmin(), 'api')
+            ->getJson('api/admin/tasks/' . $task->getKey())
+            ->assertOk()
+            ->assertJson([
+                'data' => [
+                    'id' => $task->getKey(),
+                    'notes' => [[
+                        'task_id' => $task->getKey(),
+                    ]]
+                ]
+            ])
+            ->assertJsonCount(3, 'data.notes')
+            ->assertJsonStructure([
+                'data' => [
+                    'id',
+                    'title',
+                    'created_by_id',
+                    'completed_at',
+                    'related_type',
+                    'related_id',
+                    'notes' => [[
+                        'id',
+                        'note',
+                        'task_id',
+                        'user' => [
+                            'id',
+                            'first_name',
+                            'last_name',
+                        ]
+                    ]]
+                ]
+            ]);
+    }
+
+    public function testAdminTaskDetailsNotFound(): void
+    {
+        $this->actingAs($this->makeAdmin(), 'api')
+            ->getJson('api/admin/tasks/123')
+            ->assertNotFound();
+    }
+
+    public function testAdminTaskDetailsForbidden(): void
+    {
+        $this->actingAs($this->makeUser(), 'api')
+            ->getJson('api/admin/tasks/' . Task::factory()->create()->getKey())
+            ->assertForbidden();
+    }
+
+    public function testAdminTaskDetailsUnauthorized(): void
+    {
+        $this->getJson('api/admin/tasks/' . Task::factory()->create()->getKey())
             ->assertUnauthorized();
     }
 }
