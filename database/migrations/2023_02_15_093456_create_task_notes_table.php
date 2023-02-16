@@ -10,7 +10,7 @@ class CreateTaskNotesTable extends Migration
     {
         Schema::create('task_notes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('task_id')->constrained('tasks');
+            $table->foreignId('task_id')->constrained('tasks')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users');
             $table->text('note');
             $table->timestamps();
