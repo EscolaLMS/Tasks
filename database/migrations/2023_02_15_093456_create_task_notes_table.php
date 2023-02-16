@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateTaskNotesTable extends Migration
 {
-    public function up()
+    public function up(): void
     {
         Schema::create('task_notes', function (Blueprint $table) {
             $table->id();
@@ -21,7 +21,7 @@ class CreateTaskNotesTable extends Migration
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('task_notes');
 

@@ -11,9 +11,8 @@ class DeleteTaskNoteRequest extends TaskNoteRequest
     public function authorize(): bool
     {
         $taskNote = $this->getTaskNote($this->route('id'));
-        $task = $taskNote->task;
 
-        return Gate::allows('delete', $taskNote) && $this->isTaskNoteOwner($taskNote) && ($this->isOwner($task) || $this->isAssigned($task));
+        return Gate::allows('delete', $taskNote) && $this->isTaskNoteOwner($taskNote);
     }
 
     public function getId(): ?int

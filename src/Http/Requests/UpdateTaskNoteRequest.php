@@ -14,9 +14,8 @@ class UpdateTaskNoteRequest extends CreateTaskNoteRequest
         $taskNote = $this->getTaskNote(
             $this->route('id')
         );
-        $task = $taskNote->task;
 
-        return Gate::allows('update', $taskNote) && $this->isTaskNoteOwner($taskNote) && ($this->isOwner($task) || $this->isAssigned($task));
+        return Gate::allows('update', $taskNote) && $this->isTaskNoteOwner($taskNote);
     }
 
     public function toDto(): UpdateTaskNoteDto

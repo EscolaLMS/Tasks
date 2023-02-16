@@ -69,8 +69,8 @@ class TaskController extends EscolaLmsBaseController
 
     public function find(DetailsTaskRequest $request): JsonResponse
     {
-        $collection = $this->taskService->find($request->getId());
+        $result = $this->taskService->find($request->getId());
 
-        return $this->sendResponseForResource(TaskDetailsResource::make($collection));
+        return $this->sendResponseForResource(TaskDetailsResource::make($result));
     }
 }
