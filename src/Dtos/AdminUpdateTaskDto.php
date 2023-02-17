@@ -9,28 +9,11 @@ use Illuminate\Http\Request;
 
 class AdminUpdateTaskDto extends UpdateTaskDto implements DtoContract, InstantiateFromRequest
 {
-
-    private ?string $note;
-
-    public function __construct(int $id, string $title, ?string $note, ?int $userId, ?Carbon $dueDate, ?string $relatedType, ?int $relatedId)
+    public function __construct(int $id, string $title, ?int $userId, ?Carbon $dueDate, ?string $relatedType, ?int $relatedId)
     {
         parent::__construct($id, $title, $dueDate, $relatedType, $relatedId);
 
-        $this->note = $note;
         $this->userId = $userId ?? auth()->id();
-        $this->createdById = auth()->id();
-    }
-
-    public function getNote(): ?string
-    {
-        return $this->note;
-    }
-
-    public function toArray(): array
-    {
-        return parent::toArray() + [
-            'note' => $this->getNote(),
-        ];
     }
 
     public static function instantiateFromRequest(Request $request): self
@@ -38,7 +21,6 @@ class AdminUpdateTaskDto extends UpdateTaskDto implements DtoContract, Instantia
         return new static(
             $request->route('id'),
             $request->input('title'),
-            $request->input('note'),
             $request->input('user_id'),
             Carbon::parse($request->input('due_date')),
             $request->input('related_type'),

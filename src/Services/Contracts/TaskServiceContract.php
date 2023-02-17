@@ -26,4 +26,6 @@ interface TaskServiceContract
     public function findAllByUser(PageDto $pageDto, CriteriaDto $criteriaDto): LengthAwarePaginator;
 
     public function findAll(PageDto $pageDto, CriteriaDto $criteriaDto): LengthAwarePaginator;
+
+    public function find(int $id): Task;
 }

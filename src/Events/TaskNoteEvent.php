@@ -2,23 +2,23 @@
 
 namespace EscolaLms\Tasks\Events;
 
-use EscolaLms\Tasks\Models\Task;
+use EscolaLms\Tasks\Models\TaskNote;
 use EscolaLms\Tasks\Models\User;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-abstract class TaskEvent
+abstract class TaskNoteEvent
 {
     use Dispatchable, SerializesModels;
 
     private User $user;
 
-    private Task $task;
+    private TaskNote $taskNote;
 
-    public function __construct(User $user, Task $task)
+    public function __construct(User $user, TaskNote $taskNote)
     {
         $this->user = $user;
-        $this->task = $task;
+        $this->taskNote = $taskNote;
     }
 
     public function getUser(): User
@@ -26,8 +26,8 @@ abstract class TaskEvent
         return $this->user;
     }
 
-    public function getTask(): Task
+    public function getTaskNote(): TaskNote
     {
-        return $this->task;
+        return $this->taskNote;
     }
 }

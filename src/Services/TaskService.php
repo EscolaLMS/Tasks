@@ -19,17 +19,17 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class TaskService implements TaskServiceContract
 {
-    private TaskRepositoryContract $taskRepositoryContract;
+    private TaskRepositoryContract $taskRepository;
 
-    public function __construct(TaskRepositoryContract $taskRepositoryContract)
+    public function __construct(TaskRepositoryContract $taskRepository)
     {
-        $this->taskRepositoryContract = $taskRepositoryContract;
+        $this->taskRepository = $taskRepository;
     }
 
     public function create(CreateTaskDto $dto): Task
     {
         /** @var Task $task */
-        $task = $this->taskRepositoryContract->create($dto->toArray());
+        $task = $this->taskRepository->create($dto->toArray());
 
         if ($task->isAssigned()) {
             event(new TaskAssignedEvent($task->user, $task));
@@ -41,7 +41,7 @@ class TaskService implements TaskServiceContract
     public function update(UpdateTaskDto $dto): Task
     {
         /** @var Task $task */
-        $task = $this->taskRepositoryContract->update($dto->toArray(), $dto->getId());
+        $task = $this->taskRepository->update($dto->toArray(), $dto->getId());
 
         if ($task->isAssigned()) {
             event(new TaskUpdatedEvent($task->user, $task));
@@ -53,23 +53,23 @@ class TaskService implements TaskServiceContract
     public function delete(int $id): void
     {
         /** @var Task $task */
-        $task = $this->taskRepositoryContract->find($id);
+        $task = $this->taskRepository->find($id);
 
         if ($task->isAssigned()) {
             event(new TaskDeletedEvent($task->user, $task));
         }
 
-        $this->taskRepositoryContract->delete($id);
+        $this->taskRepository->delete($id);
     }
 
     public function completeOwn(int $id): Task
     {
         /** @var Task $task */
-        $task = $this->taskRepositoryContract->find($id);
+        $task = $this->taskRepository->find($id);
 
         if ($task->isOwner()) {
             $task->completed_at = Carbon::now();
-            $task = $this->taskRepositoryContract->update($task->toArray(), $task->getKey());
+            $task = $this->taskRepository->update($task->toArray(), $task->getKey());
         } else {
             event(new TaskCompleteRequestEvent($task->createdBy, $task));
         }
@@ -80,10 +80,10 @@ class TaskService implements TaskServiceContract
     public function complete(int $id): Task
     {
         /** @var Task $task */
-        $task = $this->taskRepositoryContract->find($id);
+        $task = $this->taskRepository->find($id);
 
         $task->completed_at = Carbon::now();
-        $this->taskRepositoryContract->update($task->toArray(), $task->getKey());
+        $this->taskRepository->update($task->toArray(), $task->getKey());
 
         if (!$task->isOwner()) {
             event(new TaskCompleteUserConfirmationEvent($task->user, $task));
@@ -95,17 +95,17 @@ class TaskService implements TaskServiceContract
     public function incomplete(int $id): Task
     {
         /** @var Task $task */
-        $task = $this->taskRepositoryContract->find($id);
+        $task = $this->taskRepository->find($id);
 
         $task->completed_at = null;
-        $this->taskRepositoryContract->update($task->toArray(), $task->getKey());
+        $this->taskRepository->update($task->toArray(), $task->getKey());
 
         return $task;
     }
 
     public function findAllByUser(PageDto $pageDto, CriteriaDto $criteriaDto): LengthAwarePaginator
     {
-        return $this->taskRepositoryContract->findAllByUserId(
+        return $this->taskRepository->findAllByUserId(
             auth()->id(),
             $pageDto->getPerPage(),
             $criteriaDto->toArray()
@@ -114,9 +114,14 @@ class TaskService implements TaskServiceContract
 
     public function findAll(PageDto $pageDto, CriteriaDto $criteriaDto): LengthAwarePaginator
     {
-        return $this->taskRepositoryContract->findAll(
+        return $this->taskRepository->findAll(
             $pageDto->getPerPage(),
             $criteriaDto->toArray()
         );
+    }
+
+    public function find(int $id): Task
+    {
+        return $this->taskRepository->find($id)->load(['taskNotes', 'taskNotes.user']);
     }
 }

@@ -5,8 +5,10 @@ namespace EscolaLms\Tasks\Http\Controllers;
 use EscolaLms\Core\Http\Controllers\EscolaLmsBaseController;
 use EscolaLms\Tasks\Http\Requests\CompleteTaskRequest;
 use EscolaLms\Tasks\Http\Requests\DeleteTaskRequest;
+use EscolaLms\Tasks\Http\Requests\DetailsTaskRequest;
 use EscolaLms\Tasks\Http\Requests\IncompleteTaskRequest;
 use EscolaLms\Tasks\Http\Requests\ListTaskRequest;
+use EscolaLms\Tasks\Http\Resources\TaskDetailsResource;
 use EscolaLms\Tasks\Http\Resources\TaskResource;
 use EscolaLms\Tasks\Http\Requests\CreateTaskRequest;
 use EscolaLms\Tasks\Http\Requests\UpdateTaskRequest;
@@ -63,5 +65,12 @@ class TaskController extends EscolaLmsBaseController
         $collection = $this->taskService->findAllByUser($request->getPage(), $request->getCriteria());
 
         return $this->sendResponseForResource(TaskResource::collection($collection));
+    }
+
+    public function find(DetailsTaskRequest $request): JsonResponse
+    {
+        $result = $this->taskService->find($request->getId());
+
+        return $this->sendResponseForResource(TaskDetailsResource::make($result));
     }
 }

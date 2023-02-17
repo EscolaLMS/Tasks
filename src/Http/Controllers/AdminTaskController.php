@@ -7,6 +7,8 @@ use EscolaLms\Tasks\Http\Requests\Admin\AdminCompleteTaskRequest;
 use EscolaLms\Tasks\Http\Requests\Admin\AdminDeleteTaskRequest;
 use EscolaLms\Tasks\Http\Requests\Admin\AdminIncompleteTaskRequest;
 use EscolaLms\Tasks\Http\Requests\Admin\AdminListTaskRequest;
+use EscolaLms\Tasks\Http\Requests\Admin\AdminDetailsTaskRequest;
+use EscolaLms\Tasks\Http\Resources\TaskDetailsResource;
 use EscolaLms\Tasks\Http\Resources\TaskResource;
 use EscolaLms\Tasks\Http\Requests\Admin\AdminCreateTaskRequest;
 use EscolaLms\Tasks\Http\Requests\Admin\AdminUpdateTaskRequest;
@@ -63,5 +65,12 @@ class AdminTaskController extends EscolaLmsBaseController
         $collection = $this->taskService->findAll($request->getPage(), $request->getCriteria());
 
         return $this->sendResponseForResource(TaskResource::collection($collection));
+    }
+
+    public function find(AdminDetailsTaskRequest $request): JsonResponse
+    {
+        $result = $this->taskService->find($request->getId());
+
+        return $this->sendResponseForResource(TaskDetailsResource::make($result));
     }
 }

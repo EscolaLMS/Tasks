@@ -16,6 +16,11 @@ class TaskPolicy
         return $user->can(TaskPermissionEnum::LIST_OWN_TASK);
     }
 
+    public function findOwn(User $user, Task $task): bool
+    {
+        return $user->can(TaskPermissionEnum::FIND_OWN_TASK);
+    }
+
     public function createOwn(User $user): bool
     {
         return $user->can(TaskPermissionEnum::CREATE_OWN_TASK);
@@ -34,6 +39,11 @@ class TaskPolicy
     public function list(User $user): bool
     {
         return $user->can(TaskPermissionEnum::LIST_TASK);
+    }
+
+    public function find(User $user, Task $task): bool
+    {
+        return $user->can(TaskPermissionEnum::FIND_TASK);
     }
 
     public function create(User $user): bool
