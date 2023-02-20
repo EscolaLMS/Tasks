@@ -327,7 +327,16 @@ class TaskIndexApiTest extends TestCase
                 'data' => [
                     'id',
                     'title',
-                    'created_by_id',
+                    'user' => [
+                        'id',
+                        'first_name',
+                        'last_name',
+                    ],
+                    'created_by' => [
+                        'id',
+                        'first_name',
+                        'last_name',
+                    ],
                     'completed_at',
                     'related_type',
                     'related_id',
@@ -362,7 +371,16 @@ class TaskIndexApiTest extends TestCase
                 'data' => [
                     'id',
                     'title',
-                    'created_by_id',
+                    'user' => [
+                        'id',
+                        'first_name',
+                        'last_name',
+                    ],
+                    'created_by' => [
+                        'id',
+                        'first_name',
+                        'last_name',
+                    ],
                     'completed_at',
                     'related_type',
                     'related_id',
@@ -419,7 +437,16 @@ class TaskIndexApiTest extends TestCase
                 'data' => [
                     'id',
                     'title',
-                    'created_by_id',
+                    'user' => [
+                        'id',
+                        'first_name',
+                        'last_name',
+                    ],
+                    'created_by' => [
+                        'id',
+                        'first_name',
+                        'last_name',
+                    ],
                     'completed_at',
                     'related_type',
                     'related_id',
@@ -450,7 +477,16 @@ class TaskIndexApiTest extends TestCase
                 'data' => [
                     'id',
                     'title',
-                    'created_by_id',
+                    'user' => [
+                        'id',
+                        'first_name',
+                        'last_name',
+                    ],
+                    'created_by' => [
+                        'id',
+                        'first_name',
+                        'last_name',
+                    ],
                     'completed_at',
                     'related_type',
                     'related_id',
