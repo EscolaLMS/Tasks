@@ -6,6 +6,35 @@ use EscolaLms\Tasks\Dtos\CreateTaskDto;
 use EscolaLms\Tasks\Models\Task;
 use Illuminate\Support\Facades\Gate;
 
+
+/**
+ * @OA\Schema(
+ *      schema="TaskCreateRequest",
+ *      required={"title"},
+ *      @OA\Property(
+ *          property="title",
+ *          description="title",
+ *          type="string"
+ *      ),
+ *      @OA\Property(
+ *          property="related_type",
+ *          description="related_type",
+ *          type="string"
+ *      ),
+ *     @OA\Property(
+ *          property="related_id",
+ *          description="related_id",
+ *          type="integer"
+ *      ),
+ *      @OA\Property(
+ *          property="due_date",
+ *          description="due_date",
+ *          type="string",
+ *          format="date-time"
+ *      ),
+ * )
+ *
+ */
 class CreateTaskRequest extends TaskRequest
 {
     public function authorize(): bool

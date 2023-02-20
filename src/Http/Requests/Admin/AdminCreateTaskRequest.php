@@ -7,6 +7,40 @@ use EscolaLms\Tasks\Http\Requests\TaskRequest;
 use EscolaLms\Tasks\Models\Task;
 use Illuminate\Support\Facades\Gate;
 
+
+/**
+ * @OA\Schema(
+ *      schema="AdminTaskCreateRequest",
+ *      required={"title", "user_id"},
+ *      @OA\Property(
+ *          property="title",
+ *          description="title",
+ *          type="string"
+ *      ),
+ *      @OA\Property(
+ *          property="related_type",
+ *          description="related_type",
+ *          type="string"
+ *      ),
+ *     @OA\Property(
+ *          property="related_id",
+ *          description="related_id",
+ *          type="integer"
+ *      ),
+ *     @OA\Property(
+ *          property="user_id",
+ *          description="user_id",
+ *          type="integer"
+ *      ),
+ *      @OA\Property(
+ *          property="due_date",
+ *          description="due_date",
+ *          type="string",
+ *          format="date-time"
+ *      ),
+ * )
+ *
+ */
 class AdminCreateTaskRequest extends TaskRequest
 {
     public function authorize(): bool

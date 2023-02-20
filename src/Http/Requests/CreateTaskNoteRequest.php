@@ -6,6 +6,24 @@ use EscolaLms\Tasks\Dtos\CreateTaskNoteDto;
 use EscolaLms\Tasks\Models\TaskNote;
 use Illuminate\Support\Facades\Gate;
 
+
+/**
+ * @OA\Schema(
+ *      schema="TaskNoteCreateRequest",
+ *      required={"note", "task_id"},
+ *      @OA\Property(
+ *          property="note",
+ *          description="note",
+ *          type="string"
+ *      ),
+ *      @OA\Property(
+ *          property="task_id",
+ *          description="task_id",
+ *          type="integer"
+ *      ),
+ * )
+ *
+ */
 class CreateTaskNoteRequest extends TaskNoteRequest
 {
     public function authorize(): bool

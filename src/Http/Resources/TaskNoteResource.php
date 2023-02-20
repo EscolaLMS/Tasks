@@ -6,6 +6,33 @@ use EscolaLms\Tasks\Models\TaskNote;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
+ * @OA\Schema(
+ *      schema="TaskNoteResource",
+ *      required={"id", "note", "user", "task_id"},
+ *      @OA\Property(
+ *          property="id",
+ *          description="id",
+ *          type="integer"
+ *      ),
+ *      @OA\Property(
+ *          property="note",
+ *          description="note",
+ *          type="string"
+ *      ),
+ *      @OA\Property(
+ *          property="user",
+ *          ref="#/components/schemas/UserResource"
+ *      ),
+ *      @OA\Property(
+ *          property="task_id",
+ *          description="task_id",
+ *          type="integer"
+ *      ),
+ * )
+ *
+ */
+
+/**
  * @mixin TaskNote
  */
 class TaskNoteResource extends JsonResource

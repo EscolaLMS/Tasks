@@ -7,6 +7,54 @@ use EscolaLms\Tasks\Models\TaskNote;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
+ * @OA\Schema(
+ *      schema="TaskDetailsResource",
+ *      required={"title", "user", "created_by"},
+ *      @OA\Property(
+ *          property="title",
+ *          description="title",
+ *          type="string"
+ *      ),
+ *      @OA\Property(
+ *          property="related_type",
+ *          description="related_type",
+ *          type="string"
+ *      ),
+ *     @OA\Property(
+ *          property="related_id",
+ *          description="related_id",
+ *          type="integer"
+ *      ),
+ *      @OA\Property(
+ *          property="user",
+ *          ref="#/components/schemas/UserResource"
+ *      ),
+ *      @OA\Property(
+ *          property="created_by",
+ *          ref="#/components/schemas/UserResource"
+ *      ),
+ *      @OA\Property(
+ *          property="due_date",
+ *          description="due_date",
+ *          type="string",
+ *          format="date-time"
+ *      ),
+ *     @OA\Property(
+ *          property="completed_at",
+ *          description="completed_at",
+ *          type="string",
+ *          format="date-time"
+ *      ),
+ *      @OA\Property(
+ *          property="notes",
+ *          type="array",
+ *          @OA\Items(ref="#/components/schemas/TaskNoteResource")
+ *      ),
+ * )
+ *
+ */
+
+/**
  * @mixin Task
  */
 class TaskDetailsResource extends JsonResource
@@ -16,7 +64,8 @@ class TaskDetailsResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'created_by_id' => $this->created_by_id,
+            'user' => UserResource::make($this->user),
+            'created_by' => UserResource::make($this->createdBy),
             'completed_at' => $this->completed_at,
             'related_type' => $this->related_type,
             'related_id' => $this->related_id,

@@ -5,6 +5,55 @@ namespace EscolaLms\Tasks\Http\Resources;
 use EscolaLms\Tasks\Models\Task;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+
+/**
+ * @OA\Schema(
+ *      schema="TaskResource",
+ *      required={"title", "user", "created_by"},
+ *      @OA\Property(
+ *          property="title",
+ *          description="title",
+ *          type="string"
+ *      ),
+ *      @OA\Property(
+ *          property="related_type",
+ *          description="related_type",
+ *          type="string"
+ *      ),
+ *     @OA\Property(
+ *          property="related_id",
+ *          description="related_id",
+ *          type="integer"
+ *      ),
+ *      @OA\Property(
+ *          property="user",
+ *          ref="#/components/schemas/UserResource"
+ *      ),
+ *      @OA\Property(
+ *          property="created_by",
+ *          ref="#/components/schemas/UserResource"
+ *      ),
+ *      @OA\Property(
+ *          property="due_date",
+ *          description="due_date",
+ *          type="string",
+ *          format="date-time"
+ *      ),
+ *     @OA\Property(
+ *          property="completed_at",
+ *          description="completed_at",
+ *          type="string",
+ *          format="date-time"
+ *      ),
+ *     @OA\Property(
+ *          property="has_notes",
+ *          description="has_notes",
+ *          type="boolean"
+ *      ),
+ * )
+ *
+ */
+
 /**
  * @mixin Task
  */
