@@ -2,7 +2,7 @@
 
 namespace EscolaLms\Tasks\Dtos;
 
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use EscolaLms\Core\Dtos\Contracts\DtoContract;
 use EscolaLms\Core\Dtos\Contracts\InstantiateFromRequest;
 use Illuminate\Http\Request;

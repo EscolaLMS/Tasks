@@ -8,6 +8,7 @@ use EscolaLms\Tasks\Dtos\PageDto;
 use EscolaLms\Tasks\Dtos\UpdateTaskDto;
 use EscolaLms\Tasks\Models\Task;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 interface TaskServiceContract
 {
@@ -28,4 +29,6 @@ interface TaskServiceContract
     public function findAll(PageDto $pageDto, CriteriaDto $criteriaDto): LengthAwarePaginator;
 
     public function find(int $id): Task;
+
+    public function findAllOverdue(int $periodStart = 0, int $periodEnd = 0): Collection;
 }
