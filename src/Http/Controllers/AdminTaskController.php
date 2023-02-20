@@ -3,6 +3,7 @@
 namespace EscolaLms\Tasks\Http\Controllers;
 
 use EscolaLms\Core\Http\Controllers\EscolaLmsBaseController;
+use EscolaLms\Tasks\Http\Controllers\Swagger\AdminTaskControllerSwagger;
 use EscolaLms\Tasks\Http\Requests\Admin\AdminCompleteTaskRequest;
 use EscolaLms\Tasks\Http\Requests\Admin\AdminDeleteTaskRequest;
 use EscolaLms\Tasks\Http\Requests\Admin\AdminIncompleteTaskRequest;
@@ -15,8 +16,7 @@ use EscolaLms\Tasks\Http\Requests\Admin\AdminUpdateTaskRequest;
 use EscolaLms\Tasks\Services\TaskService;
 use Illuminate\Http\JsonResponse;
 
-// TODO swagger
-class AdminTaskController extends EscolaLmsBaseController
+class AdminTaskController extends EscolaLmsBaseController implements AdminTaskControllerSwagger
 {
     private TaskService $taskService;
 
