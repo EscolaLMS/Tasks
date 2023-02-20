@@ -17,6 +17,9 @@ use EscolaLms\Tasks\Services\TaskNoteService;
 use EscolaLms\Tasks\Services\TaskService;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * SWAGGER_VERSION
+ */
 class EscolaLmsTasksServiceProvider extends ServiceProvider
 {
     const CONFIG_KEY = 'escolalms_tasks';
@@ -42,7 +45,6 @@ class EscolaLmsTasksServiceProvider extends ServiceProvider
         $this->app->register(ScheduleServiceProvider::class);
         $this->app->register(EscolaLmsSettingsServiceProvider::class);
         $this->app->register(EscolaLmsAuthServiceProvider::class);
-
     }
 
     public function boot()
