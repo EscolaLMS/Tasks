@@ -58,8 +58,8 @@ interface TaskControllerSwagger
 
     /**
      * @OA\Patch(
-     *      path="/api/tasks",
-     *      summary="Store a newly created task",
+     *      path="/api/tasks/{id}",
+     *      summary="Update task",
      *      tags={"Tasks"},
      *      description="Store Task",
      *      security={
