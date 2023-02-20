@@ -2,7 +2,11 @@
 
 namespace EscolaLms\Tasks;
 
+use EscolaLms\Auth\EscolaLmsAuthServiceProvider;
+use EscolaLms\Settings\EscolaLmsSettingsServiceProvider;
 use EscolaLms\Tasks\Providers\AuthServiceProvider;
+use EscolaLms\Tasks\Providers\ScheduleServiceProvider;
+use EscolaLms\Tasks\Providers\SettingsServiceProvider;
 use EscolaLms\Tasks\Repositories\Contracts\TaskNoteRepositoryContract;
 use EscolaLms\Tasks\Repositories\Contracts\TaskRepositoryContract;
 use EscolaLms\Tasks\Repositories\TaskNoteRepository;
@@ -34,6 +38,11 @@ class EscolaLmsTasksServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/config.php', self::CONFIG_KEY);
 
         $this->app->register(AuthServiceProvider::class);
+        $this->app->register(SettingsServiceProvider::class);
+        $this->app->register(ScheduleServiceProvider::class);
+        $this->app->register(EscolaLmsSettingsServiceProvider::class);
+        $this->app->register(EscolaLmsAuthServiceProvider::class);
+
     }
 
     public function boot()

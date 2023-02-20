@@ -1,3 +1,7 @@
 <?php
 
-return [];
+return [
+    'notifications' => [
+        'overdue_period' => 30,
+    ],
+];

@@ -2,7 +2,7 @@
 
 namespace EscolaLms\Tasks\Services;
 
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use EscolaLms\Tasks\Dtos\CreateTaskDto;
 use EscolaLms\Tasks\Dtos\PageDto;
 use EscolaLms\Tasks\Dtos\CriteriaDto;
@@ -16,6 +16,7 @@ use EscolaLms\Tasks\Models\Task;
 use EscolaLms\Tasks\Repositories\Contracts\TaskRepositoryContract;
 use EscolaLms\Tasks\Services\Contracts\TaskServiceContract;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class TaskService implements TaskServiceContract
 {
@@ -117,6 +118,13 @@ class TaskService implements TaskServiceContract
         return $this->taskRepository->findAll(
             $pageDto->getPerPage(),
             $criteriaDto->toArray()
+        );
+    }
+
+    public function findAllOverdue(int $periodStart = 0, int $periodEnd = 0): Collection
+    {
+        return $this->taskRepository->findAllCompletedByDueDate(
+            [Carbon::now()->subDays($periodEnd), Carbon::now()->subDays($periodStart)], false
         );
     }
 

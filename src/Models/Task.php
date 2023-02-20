@@ -2,7 +2,7 @@
 
 namespace EscolaLms\Tasks\Models;
 
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use EscolaLms\Tasks\Database\Factories\TaskFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

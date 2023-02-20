@@ -2,7 +2,7 @@
 
 namespace EscolaLms\Tasks\Tests;
 
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use EscolaLms\Core\Models\User;
 use EscolaLms\Tasks\Models\Task;
 use Illuminate\Foundation\Testing\WithFaker;

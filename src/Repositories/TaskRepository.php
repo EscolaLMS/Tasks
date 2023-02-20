@@ -2,6 +2,7 @@
 
 namespace EscolaLms\Tasks\Repositories;
 
+use Illuminate\Support\Carbon;
 use EscolaLms\Core\Repositories\BaseRepository;
 use EscolaLms\Tasks\Models\Task;
 use EscolaLms\Tasks\Repositories\Contracts\TaskRepositoryContract;
@@ -18,6 +19,14 @@ class TaskRepository extends BaseRepository implements TaskRepositoryContract
     public function getFieldsSearchable(): array
     {
         return [];
+    }
+
+    public function findAllCompletedByDueDate(array $dueDates, ?bool $completed = true): Collection
+    {
+        return $this->model->newQuery()
+            ->whereBetween('due_date', $dueDates)
+            ->whereNull('completed_at', 'and', $completed)
+            ->get();
     }
 
     public function findAllByUserId(int $userId, int $perPage, array $criteria): LengthAwarePaginator
