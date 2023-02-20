@@ -36,6 +36,9 @@ class OverdueTaskJobTest extends TestCase
             ->create([
                 'due_date' => Carbon::now()->addDays(5)
             ]);
+        Task::factory()
+            ->count(15)
+            ->create(['due_date' => null]);
 
         Event::fake();
         (new OverdueTaskJob(0, 5))->handle();
