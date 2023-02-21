@@ -17,8 +17,8 @@ class AdminUpdateTaskRequest extends TaskRequest
     {
         return [
             'title' => ['required', 'string'],
-            'related_type' => ['string'],
-            'related_id' => ['integer'],
+            'related_type' => ['nullable', 'string', 'required_with:related_id'],
+            'related_id' => ['nullable', 'integer', 'required_with:related_type'],
             'user_id' => ['required', 'integer', 'exists:users,id'],
             'due_date' => ['date', 'after_or_equal:now'],
         ];
