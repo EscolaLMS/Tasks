@@ -43,6 +43,53 @@ class TaskCreateApiTest extends TestCase
         Event::assertNotDispatched(TaskAssignedEvent::class);
     }
 
+    public function testUserCreateTaskNullableRelated(): void
+    {
+        $user = $this->makeStudent();
+        $payload = $this->userCreationPayload([
+            'related_type' => null,
+            'related_id' => null,
+        ]);
+
+        $this->actingAs($user, 'api')
+            ->postJson('api/tasks', $payload)
+            ->assertCreated();
+
+        $this->assertDatabaseHas('tasks', [
+            'title' => $payload['title'],
+            'user_id' => $user->id,
+            'created_by_id' => $user->id,
+            'due_date' => $payload['due_date'],
+            'related_type' => null,
+            'related_id' => null,
+        ]);
+
+        Event::assertNotDispatched(TaskAssignedEvent::class);
+    }
+
+    public function testUserCreateTaskRelatedValidation(): void
+    {
+        $user = $this->makeStudent();
+
+        $this->actingAs($user, 'api')
+            ->postJson('api/tasks', $this->userCreationPayload([
+                'related_type' => 'Test',
+                'related_id' => null,
+            ]))
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['related_id']);
+
+        $this->actingAs($user, 'api')
+            ->postJson('api/tasks', $this->userCreationPayload([
+                'related_type' => null,
+                'related_id' => 123,
+            ]))
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['related_type']);
+
+        Event::assertNotDispatched(TaskAssignedEvent::class);
+    }
+
     public function testUserCreateTaskExceptUserId(): void
     {
         $user = $this->makeStudent();
@@ -118,6 +165,53 @@ class TaskCreateApiTest extends TestCase
         ]);
 
         Event::assertDispatched(TaskAssignedEvent::class);
+    }
+
+    public function testAdminCreateTaskNullableRelated(): void
+    {
+        $user = $this->makeAdmin();
+        $payload = $this->adminCreationPayload([
+            'related_type' => null,
+            'related_id' => null,
+        ]);
+
+        $this->actingAs($user, 'api')
+            ->postJson('api/admin/tasks', $payload)
+            ->assertCreated();
+
+        $this->assertDatabaseHas('tasks', [
+            'title' => $payload['title'],
+            'user_id' => $payload['user_id'],
+            'created_by_id' => $user->id,
+            'due_date' => $payload['due_date'],
+            'related_type' => null,
+            'related_id' => null,
+        ]);
+
+        Event::assertDispatched(TaskAssignedEvent::class);
+    }
+
+    public function testAdminCreateTaskRelatedValidation(): void
+    {
+        $user = $this->makeAdmin();
+
+        $this->actingAs($user, 'api')
+            ->postJson('api/admin/tasks', $this->userCreationPayload([
+                'related_type' => 'Test',
+                'related_id' => null,
+            ]))
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['related_id']);
+
+        $this->actingAs($user, 'api')
+            ->postJson('api/admin/tasks', $this->userCreationPayload([
+                'related_type' => null,
+                'related_id' => 123,
+            ]))
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['related_type']);
+
+        Event::assertNotDispatched(TaskAssignedEvent::class);
     }
 
     /**

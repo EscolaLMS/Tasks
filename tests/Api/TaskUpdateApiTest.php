@@ -44,6 +44,57 @@ class TaskUpdateApiTest extends TestCase
         ]);
     }
 
+    public function testUserUpdateTaskNullableRelated(): void
+    {
+        $user = $this->makeStudent();
+        $payload = $this->userCreationPayload([
+            'related_type' => null,
+            'related_id' => null,
+        ]);
+        $task = Task::factory()->create([
+            'user_id' => $user->getKey(),
+            'created_by_id' => $user->getKey(),
+        ]);
+
+        $this->actingAs($user, 'api')
+            ->patchJson('api/tasks/' . $task->getKey(), $payload)
+            ->assertOk();
+
+        $this->assertDatabaseHas('tasks', [
+            'title' => $payload['title'],
+            'user_id' => $user->id,
+            'created_by_id' => $user->id,
+            'due_date' => $payload['due_date'],
+            'related_type' => null,
+            'related_id' => null
+        ]);
+    }
+
+    public function testUserUpdateTaskRelatedValidation(): void
+    {
+        $user = $this->makeStudent();
+        $task = Task::factory()->create([
+            'user_id' => $user->getKey(),
+            'created_by_id' => $user->getKey(),
+        ]);
+
+        $this->actingAs($user, 'api')
+            ->patchJson('api/tasks/' . $task->getKey(), $this->userCreationPayload([
+                'related_type' => 'Test',
+                'related_id' => null,
+            ]))
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['related_id']);
+
+        $this->actingAs($user, 'api')
+            ->patchJson('api/tasks/' . $task->getKey(), $this->userCreationPayload([
+                'related_type' => null,
+                'related_id' => 123,
+            ]))
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['related_type']);
+    }
+
     public function testUserUpdateTaskExceptUserId(): void
     {
         $user = $this->makeStudent();
@@ -126,6 +177,51 @@ class TaskUpdateApiTest extends TestCase
             'related_type' => $payload['related_type'],
             'related_id' => $payload['related_id'],
         ]);
+    }
+
+    public function testAdminUpdateTaskNullableRelated(): void
+    {
+        $user = $this->makeAdmin();
+        $payload = $this->adminCreationPayload([
+            'related_type' => null,
+            'related_id' => null,
+        ]);
+        $task = Task::factory()->create(['created_by_id' => $user->getKey()]);
+
+        $this->actingAs($user, 'api')
+            ->patchJson('api/admin/tasks/' . $task->getKey(), $payload)
+            ->assertOk();
+
+        $this->assertDatabaseHas('tasks', [
+            'title' => $payload['title'],
+            'user_id' => $payload['user_id'],
+            'created_by_id' => $user->id,
+            'due_date' => $payload['due_date'],
+            'related_type' => null,
+            'related_id' => null,
+        ]);
+    }
+
+    public function testAdminUpdateTaskRelatedValidation(): void
+    {
+        $user = $this->makeAdmin();
+        $task = Task::factory()->create();
+
+        $this->actingAs($user, 'api')
+            ->patchJson('api/admin/tasks/' . $task->getKey(), $this->userCreationPayload([
+                'related_type' => 'Test',
+                'related_id' => null,
+            ]))
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['related_id']);
+
+        $this->actingAs($user, 'api')
+            ->patchJson('api/admin/tasks/' . $task->getKey(), $this->userCreationPayload([
+                'related_type' => null,
+                'related_id' => 123,
+            ]))
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['related_type']);
     }
 
     public function testAdminUpdateTaskNotExists(): void
