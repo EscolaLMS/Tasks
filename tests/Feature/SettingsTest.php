@@ -25,11 +25,6 @@ class SettingsTest extends TestCase
         Config::set('escola_settings.use_database', true);
     }
 
-    protected function tearDown(): void
-    {
-        ConfigModel::truncate();
-    }
-
     public function testAdministrableConfigApi(): void
     {
         $user = config('auth.providers.users.model')::factory()->create();
