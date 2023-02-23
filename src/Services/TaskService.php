@@ -2,6 +2,7 @@
 
 namespace EscolaLms\Tasks\Services;
 
+use EscolaLms\Tasks\Events\TaskIncompleteEvent;
 use Illuminate\Support\Carbon;
 use EscolaLms\Tasks\Dtos\CreateTaskDto;
 use EscolaLms\Tasks\Dtos\PageDto;
@@ -100,6 +101,10 @@ class TaskService implements TaskServiceContract
 
         $task->completed_at = null;
         $this->taskRepository->update($task->toArray(), $task->getKey());
+
+        if ($task->isAssigned()) {
+            event(new TaskIncompleteEvent($task->user, $task));
+        }
 
         return $task;
     }

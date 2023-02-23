@@ -2,6 +2,7 @@
 
 namespace EscolaLms\Tasks\Tests\Api;
 
+use EscolaLms\Tasks\Events\TaskIncompleteEvent;
 use Illuminate\Support\Carbon;
 use EscolaLms\Tasks\Database\Seeders\TaskPermissionSeeder;
 use EscolaLms\Tasks\Events\TaskCompleteRequestEvent;
@@ -149,6 +150,8 @@ class TaskCompletionApiTest extends TestCase
 
     public function testAdminIncompleteTask(): void
     {
+        Event::fake([TaskIncompleteEvent::class]);
+
         $task = Task::factory()->create();
 
         $this->actingAs($this->makeAdmin(), 'api')
@@ -159,6 +162,10 @@ class TaskCompletionApiTest extends TestCase
             'id' => $task->getKey(),
             'completed_at' => null,
         ]);
+
+        Event::assertDispatched(function (TaskIncompleteEvent $event) use ($task) {
+            return $event->getUser()->getKey() === $task->user_id && $event->getTask()->getKey() === $task->getKey();
+        });
     }
 
     public function testAdminCompleteTaskUnauthorized(): void
