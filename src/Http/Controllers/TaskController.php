@@ -62,7 +62,7 @@ class TaskController extends EscolaLmsBaseController implements TaskControllerSw
 
     public function findAll(ListTaskRequest $request): JsonResponse
     {
-        $collection = $this->taskService->findAllByUser($request->getPage(), $request->getCriteria());
+        $collection = $this->taskService->findAllByUser($request->getPage(), $request->getCriteria(), $request->getOrder());
 
         return $this->sendResponseForResource(TaskResource::collection($collection));
     }
