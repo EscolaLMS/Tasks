@@ -78,7 +78,7 @@ interface AdminTaskControllerSwagger
      *          required=true,
      *          @OA\MediaType(
      *              mediaType="application/json",
-     *              @OA\Schema(ref="#/components/schemas/TaskCreateRequest")
+     *              @OA\Schema(ref="#/components/schemas/AdminTaskCreateRequest")
      *          ),
      *      ),
      *      @OA\Response(

@@ -62,7 +62,7 @@ class AdminTaskController extends EscolaLmsBaseController implements AdminTaskCo
 
     public function findAll(AdminListTaskRequest $request): JsonResponse
     {
-        $collection = $this->taskService->findAll($request->getPage(), $request->getCriteria());
+        $collection = $this->taskService->findAll($request->getPage(), $request->getCriteria(), $request->getOrder());
 
         return $this->sendResponseForResource(TaskResource::collection($collection));
     }

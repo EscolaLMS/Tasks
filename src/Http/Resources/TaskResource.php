@@ -66,6 +66,7 @@ class TaskResource extends JsonResource
             'title' => $this->title,
             'user' => UserResource::make($this->user),
             'created_by' => UserResource::make($this->createdBy),
+            'due_date' => $this->due_date,
             'completed_at' => $this->completed_at,
             'related_type' => $this->related_type,
             'related_id' => $this->related_id,

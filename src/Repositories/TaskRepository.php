@@ -29,20 +29,24 @@ class TaskRepository extends BaseRepository implements TaskRepositoryContract
             ->get();
     }
 
-    public function findAllByUserId(int $userId, int $perPage, array $criteria): LengthAwarePaginator
+    public function findAllByUserId(int $userId, int $perPage, array $criteria, string $orderDirection, string $orderColumn): LengthAwarePaginator
     {
         $query = $this->model->newQuery()->with(['taskNotes', 'user', 'createdBy']);
         $query = $this->applyCriteria($query, $criteria);
         $query = $query->where('user_id', '=', $userId);
 
-        return $query->paginate($perPage);
+        return $query
+            ->orderBy($orderColumn, $orderDirection)
+            ->paginate($perPage);
     }
 
-    public function findAll(int $perPage, array $criteria): LengthAwarePaginator
+    public function findAll(int $perPage, array $criteria, string $orderDirection, string $orderColumn): LengthAwarePaginator
     {
         $query = $this->model->newQuery()->with(['taskNotes', 'user', 'createdBy']);
         $query = $this->applyCriteria($query, $criteria);
 
-        return $query->paginate($perPage);
+        return $query
+            ->orderBy($orderColumn, $orderDirection)
+            ->paginate($perPage);
     }
 }
