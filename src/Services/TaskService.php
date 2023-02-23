@@ -7,6 +7,7 @@ use Illuminate\Support\Carbon;
 use EscolaLms\Tasks\Dtos\CreateTaskDto;
 use EscolaLms\Tasks\Dtos\PageDto;
 use EscolaLms\Tasks\Dtos\CriteriaDto;
+use EscolaLms\Tasks\Dtos\OrderDto;
 use EscolaLms\Tasks\Dtos\UpdateTaskDto;
 use EscolaLms\Tasks\Events\TaskAssignedEvent;
 use EscolaLms\Tasks\Events\TaskCompleteRequestEvent;
@@ -109,20 +110,24 @@ class TaskService implements TaskServiceContract
         return $task;
     }
 
-    public function findAllByUser(PageDto $pageDto, CriteriaDto $criteriaDto): LengthAwarePaginator
+    public function findAllByUser(PageDto $pageDto, CriteriaDto $criteriaDto, OrderDto $orderDto): LengthAwarePaginator
     {
         return $this->taskRepository->findAllByUserId(
             auth()->id(),
             $pageDto->getPerPage(),
-            $criteriaDto->toArray()
+            $criteriaDto->toArray(),
+            $orderDto->getOrderDirection(),
+            $orderDto->getOrderBy(),
         );
     }
 
-    public function findAll(PageDto $pageDto, CriteriaDto $criteriaDto): LengthAwarePaginator
+    public function findAll(PageDto $pageDto, CriteriaDto $criteriaDto, OrderDto $orderDto): LengthAwarePaginator
     {
         return $this->taskRepository->findAll(
             $pageDto->getPerPage(),
-            $criteriaDto->toArray()
+            $criteriaDto->toArray(),
+            $orderDto->getOrderDirection(),
+            $orderDto->getOrderBy(),
         );
     }
 

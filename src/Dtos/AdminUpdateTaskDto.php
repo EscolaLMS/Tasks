@@ -16,6 +16,18 @@ class AdminUpdateTaskDto extends UpdateTaskDto implements DtoContract, Instantia
         $this->userId = $userId ?? auth()->id();
     }
 
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'user_id' => $this->getUserId(),
+            'due_date' => $this->getDueDate(),
+            'related_type' => $this->getRelatedType(),
+            'related_id' => $this->getRelatedId(),
+        ];
+    }
+
     public static function instantiateFromRequest(Request $request): self
     {
         return new static(

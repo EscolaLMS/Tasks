@@ -8,6 +8,8 @@ use EscolaLms\Tasks\Models\TaskNote;
 use EscolaLms\Tasks\Tests\CreatesUsers;
 use EscolaLms\Tasks\Tests\TaskTesting;
 use EscolaLms\Tasks\Tests\TestCase;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 
 class TaskIndexApiTest extends TestCase
 {
@@ -44,6 +46,7 @@ class TaskIndexApiTest extends TestCase
                     'first_name',
                     'last_name',
                 ],
+                'due_date',
                 'completed_at',
                 'related_type',
                 'related_id',
@@ -100,6 +103,101 @@ class TaskIndexApiTest extends TestCase
                     return $tasks;
                 }),
                 'filterCount' => 1
+            ],
+            [
+                'filter' => [
+                    'due_date_from' => Carbon::now()->startOfDay(),
+                    'due_date_to' => Carbon::now()->endOfDay(),
+                ],
+                'data' => (function(int $userId) {
+                    $tasks = collect();
+                    $tasks->push(Task::factory());
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->endOfDay(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->startOfDay(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->addDay(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subDays(2), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->addMonth(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subMonth(), 'user_id' => $userId]));
+
+                    return $tasks;
+                }),
+                'filterCount' => 3
+            ],
+            [
+                'filter' => [
+                    'due_date_from' => Carbon::now()->addDays(3)->startOfDay(),
+                ],
+                'data' => (function(int $userId) {
+                    $tasks = collect();
+                    $tasks->push(Task::factory());
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->addHours(5), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subHours(10), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->addDays(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subDays(2), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->addMonth(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->addDays(3), 'user_id' => $userId]));
+
+                    return $tasks;
+                }),
+                'filterCount' => 2
+            ],
+            [
+                'filter' => [
+                    'due_date_from' => Carbon::now()->startOfDay(),
+                ],
+                'data' => (function(int $userId) {
+                    $tasks = collect();
+                    $tasks->push(Task::factory());
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->addHours(5), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->addDay(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subDay(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subMonth(), 'user_id' => $userId]));
+
+                    return $tasks;
+                }),
+                'filterCount' => 3
+            ],
+            [
+                'filter' => [
+                    'due_date_to' => Carbon::now()->subDays(3)->startOfDay(),
+                ],
+                'data' => (function(int $userId) {
+                    $tasks = collect();
+                    $tasks->push(Task::factory());
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->addHours(5), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subHours(10), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subDays(2), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subDays(3), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subDays(4), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->addMonth(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subMonth(), 'user_id' => $userId]));
+
+                    return $tasks;
+                }),
+                'filterCount' => 3
+            ],
+            [
+                'filter' => [
+                    'due_date_to' => Carbon::now()->endOfDay(),
+                ],
+                'data' => (function(int $userId) {
+                    $tasks = collect();
+                    $tasks->push(Task::factory());
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subDay(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subDays(2), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subDays(3), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->addDay(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->addDays(2), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->addMonth(), 'user_id' => $userId]));
+
+                    return $tasks;
+                }),
+                'filterCount' => 4
             ]
         ];
     }
@@ -130,6 +228,7 @@ class TaskIndexApiTest extends TestCase
                     'first_name',
                     'last_name',
                 ],
+                'due_date',
                 'completed_at',
                 'related_type',
                 'related_id',
@@ -229,6 +328,111 @@ class TaskIndexApiTest extends TestCase
                     return $tasks;
                 }),
                 'filterCount' => 2
+            ],
+            [
+                'filter' =>  (function($params) {
+                    return [
+                        'due_date_from' => Carbon::now()->startOfDay(),
+                        'due_date_to' => Carbon::now()->endOfDay(),
+                    ];
+                }),
+                'data' => (function(int $userId) {
+                    $tasks = collect();
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->endOfDay(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->startOfDay(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->addDay(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subDays(2), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->addMonth(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subMonth(), 'user_id' => $userId]));
+
+                    return $tasks;
+                }),
+                'filterCount' => 4
+            ],
+            [
+                'filter' =>  (function($params) {
+                    return [
+                        'due_date_from' => Carbon::now()->addDays(3)->startOfDay(),
+                    ];
+                }),
+                'data' => (function(int $userId) {
+                    $tasks = collect();
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->addHours(5), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subHours(10), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->addDays(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subDays(2), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->addMonth(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->addDays(3), 'user_id' => $userId]));
+
+                    return $tasks;
+                }),
+                'filterCount' => 2
+            ],
+            [
+                'filter' => (function($params) {
+                    return [
+                        'due_date_from' => Carbon::now()->startOfDay(),
+                    ];
+                }),
+                'data' => (function(int $userId) {
+                    $tasks = collect();
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->addHours(5), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->addDay(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subDay(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subMonth(), 'user_id' => $userId]));
+
+                    return $tasks;
+                }),
+                'filterCount' => 4
+            ],
+            [
+                'filter' => (function($params) {
+                    return [
+                        'due_date_to' => Carbon::now()->subDays(3)->startOfDay(),
+                    ];
+                }),
+                'data' => (function(int $userId) {
+                    $tasks = collect();
+                    $tasks->push(Task::factory());
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->addHours(5), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subHours(10), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subDays(2), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subDays(3), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subDays(4), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->addMonth(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subMonth(), 'user_id' => $userId]));
+
+                    return $tasks;
+                }),
+                'filterCount' => 3
+            ],
+            [
+                'filter' => (function($params) {
+                    return [
+                        'due_date_to' => Carbon::now()->endOfDay(),
+                    ];
+                }),
+                'data' => (function(int $userId) {
+                    $tasks = collect();
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subDay(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subDays(2), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->subDays(3), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->addDay(), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->addDays(2), 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['due_date' => Carbon::now()->addMonth(), 'user_id' => $userId]));
+
+                    return $tasks;
+                }),
+                'filterCount' => 5
             ]
         ];
     }
@@ -337,6 +541,7 @@ class TaskIndexApiTest extends TestCase
                         'first_name',
                         'last_name',
                     ],
+                    'due_date',
                     'completed_at',
                     'related_type',
                     'related_id',
@@ -381,6 +586,7 @@ class TaskIndexApiTest extends TestCase
                         'first_name',
                         'last_name',
                     ],
+                    'due_date',
                     'completed_at',
                     'related_type',
                     'related_id',
@@ -447,6 +653,7 @@ class TaskIndexApiTest extends TestCase
                         'first_name',
                         'last_name',
                     ],
+                    'due_date',
                     'completed_at',
                     'related_type',
                     'related_id',
@@ -487,6 +694,7 @@ class TaskIndexApiTest extends TestCase
                         'first_name',
                         'last_name',
                     ],
+                    'due_date',
                     'completed_at',
                     'related_type',
                     'related_id',
@@ -522,5 +730,127 @@ class TaskIndexApiTest extends TestCase
     {
         $this->getJson('api/admin/tasks/' . Task::factory()->create()->getKey())
             ->assertUnauthorized();
+    }
+
+    /**
+     * @dataProvider orderDataProvider
+     */
+    public function testUserIndexOrderBy(array $order, callable $generator, callable $assertion): void
+    {
+        $user = $this->makeStudent();
+        $firstCondition = Carbon::now()->startOfDay()->subYear();
+        $lastCondition = Carbon::now()->startOfDay()->addYear();
+
+        $generator($user->getKey(), $firstCondition, $lastCondition)->each(fn($factory) => $factory->create());
+
+        $response = $this->actingAs($user, 'api')
+            ->getJson($this->prepareUri('api/tasks', $order))
+            ->assertOk();
+
+        $assertion($response, $firstCondition, $lastCondition);
+    }
+
+    /**
+     * @dataProvider orderDataProvider
+     */
+    public function testAdminIndexOrderBy(array $order, callable $generator, callable $assertion): void
+    {
+        $user = $this->makeAdmin();
+        $firstCondition = Carbon::now()->startOfDay()->subYear();
+        $lastCondition = Carbon::now()->startOfDay()->addYear();
+
+        $generator($user->getKey(), $firstCondition, $lastCondition)->each(fn($factory) => $factory->create());
+
+        $response = $this->actingAs($user, 'api')
+            ->getJson($this->prepareUri('api/admin/tasks', $order))
+            ->assertOk();
+
+        $assertion($response, $firstCondition, $lastCondition);
+    }
+
+    public function orderDataProvider(): array
+    {
+        return [
+            [
+                'order' => [
+                    'order_by' => 'due_date',
+                    'order' => 'asc',
+                ],
+                'data' => (function(int $userId, string $firstOderParam, string $lastOrderParam) {
+                    $tasks = collect();
+                    $tasks->push(Task::factory()->state(['user_id' => $userId, 'due_date' => $firstOderParam]));
+                    $tasks->push(Task::factory()->state(['user_id' => $userId, 'due_date' => $lastOrderParam]));
+                    $tasks->push(Task::factory()->state(['user_id' => $userId, 'due_date' => Carbon::now()->subMonth()]));
+                    $tasks->push(Task::factory()->state(['user_id' => $userId, 'due_date' => Carbon::now()->addMonth()]));
+                    $tasks->push(Task::factory()->state(['user_id' => $userId, 'due_date' => Carbon::now()->addMonth()]));
+
+                    return $tasks;
+                }),
+                'assert' => (function($data, $firstCondition, string $lastCondition) {
+                    $this->assertEquals(Carbon::parse(Arr::first($data->getData()->data)->due_date), $firstCondition);
+                    $this->assertEquals(Carbon::parse(Arr::last($data->getData()->data)->due_date), $lastCondition);
+                })
+            ],
+            [
+                'order' => [
+                    'order_by' => 'due_date',
+                    'order' => 'desc',
+                ],
+                'data' => (function(int $userId, string $firstOderParam, string $lastOrderParam) {
+                    $tasks = collect();
+                    $tasks->push(Task::factory()->state(['user_id' => $userId, 'due_date' => $firstOderParam]));
+                    $tasks->push(Task::factory()->state(['user_id' => $userId, 'due_date' => $lastOrderParam]));
+                    $tasks->push(Task::factory()->state(['user_id' => $userId, 'due_date' => Carbon::now()->subMonth()]));
+                    $tasks->push(Task::factory()->state(['user_id' => $userId, 'due_date' => Carbon::now()->addMonth()]));
+                    $tasks->push(Task::factory()->state(['user_id' => $userId, 'due_date' => Carbon::now()->addMonth()]));
+
+                    return $tasks;
+                }),
+                'assert' => (function($data, $firstCondition, string $lastCondition) {
+                    $this->assertEquals(Carbon::parse(Arr::last($data->getData()->data)->due_date), $firstCondition);
+                    $this->assertEquals(Carbon::parse(Arr::first($data->getData()->data)->due_date), $lastCondition);
+                })
+            ],
+            [
+                'order' => [
+                    'order_by' => 'completed_at',
+                    'order' => 'asc',
+                ],
+                'data' => (function(int $userId, string $firstOderParam, string $lastOrderParam) {
+                    $tasks = collect();
+                    $tasks->push(Task::factory()->state(['user_id' => $userId, 'completed_at' => $firstOderParam]));
+                    $tasks->push(Task::factory()->state(['user_id' => $userId, 'completed_at' => $lastOrderParam]));
+                    $tasks->push(Task::factory()->state(['user_id' => $userId, 'completed_at' => Carbon::now()->subMonth()]));
+                    $tasks->push(Task::factory()->state(['user_id' => $userId, 'completed_at' => Carbon::now()->addMonth()]));
+                    $tasks->push(Task::factory()->state(['user_id' => $userId, 'completed_at' => Carbon::now()->addMonth()]));
+
+                    return $tasks;
+                }),
+                'assert' => (function($data, $firstCondition, string $lastCondition) {
+                    $this->assertEquals(Carbon::parse(Arr::first($data->getData()->data)->completed_at), $firstCondition);
+                    $this->assertEquals(Carbon::parse(Arr::last($data->getData()->data)->completed_at), $lastCondition);
+                })
+            ],
+            [
+                'order' => [
+                    'order_by' => 'completed_at',
+                    'order' => 'desc',
+                ],
+                'data' => (function(int $userId, string $firstOderParam, string $lastOrderParam) {
+                    $tasks = collect();
+                    $tasks->push(Task::factory()->state(['user_id' => $userId, 'completed_at' => $firstOderParam]));
+                    $tasks->push(Task::factory()->state(['user_id' => $userId, 'completed_at' => $lastOrderParam]));
+                    $tasks->push(Task::factory()->state(['user_id' => $userId, 'completed_at' => Carbon::now()->subMonth()]));
+                    $tasks->push(Task::factory()->state(['user_id' => $userId, 'completed_at' => Carbon::now()->addMonth()]));
+                    $tasks->push(Task::factory()->state(['user_id' => $userId, 'completed_at' => Carbon::now()->addMonth()]));
+
+                    return $tasks;
+                }),
+                'assert' => (function($data, $firstCondition, string $lastCondition) {
+                    $this->assertEquals(Carbon::parse(Arr::last($data->getData()->data)->completed_at), $firstCondition);
+                    $this->assertEquals(Carbon::parse(Arr::first($data->getData()->data)->completed_at), $lastCondition);
+                })
+            ],
+        ];
     }
 }

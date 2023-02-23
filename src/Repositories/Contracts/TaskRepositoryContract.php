@@ -11,7 +11,7 @@ interface TaskRepositoryContract extends BaseRepositoryContract
 {
     public function findAllCompletedByDueDate(array $dueDates, ?bool $completed = true): Collection;
 
-    public function findAllByUserId(int $userId, int $perPage, array $criteria): LengthAwarePaginator;
+    public function findAllByUserId(int $userId, int $perPage, array $criteria, string $orderDirection, string $orderColumn): LengthAwarePaginator;
 
-    public function findAll(int $perPage, array $criteria): LengthAwarePaginator;
+    public function findAll(int $perPage, array $criteria, string $orderDirection, string $orderColumn): LengthAwarePaginator;
 }

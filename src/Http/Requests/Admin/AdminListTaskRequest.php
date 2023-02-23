@@ -3,6 +3,7 @@
 namespace EscolaLms\Tasks\Http\Requests\Admin;
 
 use EscolaLms\Tasks\Dtos\CriteriaDto;
+use EscolaLms\Tasks\Dtos\OrderDto;
 use EscolaLms\Tasks\Dtos\PageDto;
 use EscolaLms\Tasks\Models\Task;
 use Illuminate\Foundation\Http\FormRequest;
@@ -28,5 +29,10 @@ class AdminListTaskRequest extends FormRequest
     public function getPage(): PageDto
     {
         return PageDto::instantiateFromRequest($this);
+    }
+
+    public function getOrder(): OrderDto
+    {
+        return OrderDto::instantiateFromRequest($this);
     }
 }

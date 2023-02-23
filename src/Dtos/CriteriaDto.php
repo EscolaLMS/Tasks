@@ -5,9 +5,11 @@ namespace EscolaLms\Tasks\Dtos;
 use EscolaLms\Core\Dtos\Contracts\DtoContract;
 use EscolaLms\Core\Dtos\Contracts\InstantiateFromRequest;
 use EscolaLms\Core\Dtos\CriteriaDto as BaseCriteriaDto;
+use EscolaLms\Core\Repositories\Criteria\Primitives\DateCriterion;
 use EscolaLms\Core\Repositories\Criteria\Primitives\EqualCriterion;
 use EscolaLms\Core\Repositories\Criteria\Primitives\LikeCriterion;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class CriteriaDto extends BaseCriteriaDto implements DtoContract, InstantiateFromRequest
@@ -31,6 +33,24 @@ class CriteriaDto extends BaseCriteriaDto implements DtoContract, InstantiateFro
         }
         if ($request->get('related_type') && !$request->get('related_id')) {
             $criteria[] = new EqualCriterion('related_type', $request->get('related_type'));
+        }
+        if ($request->get('due_date_from')) {
+            $criteria->push(
+                new DateCriterion(
+                    'due_date',
+                    new Carbon($request->get('due_date_from')),
+                    '>='
+                )
+            );
+        }
+        if ($request->get('due_date_to')) {
+            $criteria->push(
+                new DateCriterion(
+                    'due_date',
+                    new Carbon($request->get('due_date_to')),
+                    '<='
+                )
+            );
         }
 
         return new static($criteria);
