@@ -17,7 +17,6 @@ class AdminCreateTaskDto extends CreateTaskDto implements DtoContract, Instantia
         $this->userId = $userId ?? auth()->id();
     }
 
-
     public static function instantiateFromRequest(Request $request): self
     {
         return new static(
