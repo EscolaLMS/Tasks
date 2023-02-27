@@ -19,6 +19,12 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *          description="note",
  *          type="string"
  *      ),
+ *     @OA\Property(
+ *          property="created_at",
+ *          description="created_at",
+ *          type="string",
+ *          format="date-time"
+ *      ),
  *      @OA\Property(
  *          property="user",
  *          ref="#/components/schemas/UserResource"
@@ -42,6 +48,7 @@ class TaskNoteResource extends JsonResource
         return [
             'id' => $this->id,
             'note' => $this->note,
+            'created_at' => $this->created_at,
             'user' => UserResource::make($this->user),
             'task_id' => $this->task_id,
         ];

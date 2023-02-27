@@ -550,6 +550,56 @@ class TaskIndexApiTest extends TestCase
             ]);
     }
 
+    public function testUserTaskDetailsNotesOrder(): void
+    {
+        $user = $this->makeStudent();
+        $task = Task::factory()->create(['user_id' => $user->getKey()]);
+        $taskNoteFirst = TaskNote::factory()->create(['created_at' => Carbon::now()->addDay()->startOfDay(), 'task_id' => $task->getKey()]);
+        $taskNoteLast = TaskNote::factory()->create(['created_at' => Carbon::now()->subDay()->endOfDay(), 'task_id' => $task->getKey()]);
+        TaskNote::factory()->count(3)->create(['created_at' => Carbon::now(), 'task_id' => $task->getKey()]);
+
+        $response = $this->actingAs($user, 'api')
+            ->getJson('api/tasks/' . $task->getKey())
+            ->assertOk()
+            ->assertJsonStructure([
+                'data' => [
+                    'id',
+                    'title',
+                    'user' => [
+                        'id',
+                        'first_name',
+                        'last_name',
+                    ],
+                    'created_by' => [
+                        'id',
+                        'first_name',
+                        'last_name',
+                    ],
+                    'due_date',
+                    'completed_at',
+                    'related_type',
+                    'related_id',
+                    'notes' => [[
+                        'id',
+                        'note',
+                        'created_at',
+                        'task_id',
+                        'user' => [
+                            'id',
+                            'first_name',
+                            'last_name',
+                        ]
+                    ]]
+                ]
+            ]);
+
+        $notes = $response->getData()->data->notes;
+        $this->assertEquals($taskNoteFirst->getKey(), Arr::first($notes)->id);
+        $this->assertEquals($taskNoteFirst->created_at->toIsoString(), Arr::first($notes)->created_at);
+        $this->assertEquals($taskNoteLast->getKey(), Arr::last($notes)->id);
+        $this->assertEquals($taskNoteLast->created_at->toIsoString(), Arr::last($notes)->created_at);
+    }
+
     public function testUserTaskDetailsWithNotes(): void
     {
         $user = $this->makeStudent();
@@ -593,6 +643,7 @@ class TaskIndexApiTest extends TestCase
                     'notes' => [[
                         'id',
                         'note',
+                        'created_at',
                         'task_id',
                         'user' => [
                             'id',
@@ -701,6 +752,7 @@ class TaskIndexApiTest extends TestCase
                     'notes' => [[
                         'id',
                         'note',
+                        'created_at',
                         'task_id',
                         'user' => [
                             'id',
@@ -711,6 +763,57 @@ class TaskIndexApiTest extends TestCase
                 ]
             ]);
     }
+
+    public function testAdminTaskDetailsNotesOrder(): void
+    {
+        $user = $this->makeAdmin();
+        $task = Task::factory()->create();
+        $taskNoteFirst = TaskNote::factory()->create(['created_at' => Carbon::now()->addDay()->startOfDay(), 'task_id' => $task->getKey()]);
+        $taskNoteLast = TaskNote::factory()->create(['created_at' => Carbon::now()->subDay()->endOfDay(), 'task_id' => $task->getKey()]);
+        TaskNote::factory()->count(3)->create(['created_at' => Carbon::now(), 'task_id' => $task->getKey()]);
+
+        $response = $this->actingAs($user, 'api')
+            ->getJson('api/admin/tasks/' . $task->getKey())
+            ->assertOk()
+            ->assertJsonStructure([
+                'data' => [
+                    'id',
+                    'title',
+                    'user' => [
+                        'id',
+                        'first_name',
+                        'last_name',
+                    ],
+                    'created_by' => [
+                        'id',
+                        'first_name',
+                        'last_name',
+                    ],
+                    'due_date',
+                    'completed_at',
+                    'related_type',
+                    'related_id',
+                    'notes' => [[
+                        'id',
+                        'note',
+                        'created_at',
+                        'task_id',
+                        'user' => [
+                            'id',
+                            'first_name',
+                            'last_name',
+                        ]
+                    ]]
+                ]
+            ]);
+
+        $notes = $response->getData()->data->notes;
+        $this->assertEquals($taskNoteFirst->getKey(), Arr::first($notes)->id);
+        $this->assertEquals($taskNoteFirst->created_at->toIsoString(), Arr::first($notes)->created_at);
+        $this->assertEquals($taskNoteLast->getKey(), Arr::last($notes)->id);
+        $this->assertEquals($taskNoteLast->created_at->toIsoString(), Arr::last($notes)->created_at);
+    }
+
 
     public function testAdminTaskDetailsNotFound(): void
     {

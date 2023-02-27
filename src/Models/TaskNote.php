@@ -6,6 +6,7 @@ use EscolaLms\Tasks\Database\Factories\TaskNoteFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  *
@@ -17,6 +18,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $note
  * @property int $user_id
  * @property int $task_id
+ * @property Carbon $created_at
+ * @property Carbon $update_at
  *
  * @property User $user
  * @property Task $task
