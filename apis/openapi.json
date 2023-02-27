@@ -890,6 +890,10 @@
                         "description": "title",
                         "type": "string"
                     },
+                    "description": {
+                        "description": "description",
+                        "type": "string"
+                    },
                     "related_type": {
                         "description": "related_type",
                         "type": "string"
@@ -936,6 +940,10 @@
                         "description": "title",
                         "type": "string"
                     },
+                    "description": {
+                        "description": "description",
+                        "type": "string"
+                    },
                     "related_type": {
                         "description": "related_type",
                         "type": "string"
@@ -961,6 +969,10 @@
                 "properties": {
                     "title": {
                         "description": "title",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "description",
                         "type": "string"
                     },
                     "related_type": {
@@ -1031,6 +1043,10 @@
                 "properties": {
                     "title": {
                         "description": "title",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "description",
                         "type": "string"
                     },
                     "related_type": {
