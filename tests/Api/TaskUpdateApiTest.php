@@ -36,6 +36,7 @@ class TaskUpdateApiTest extends TestCase
 
         $this->assertDatabaseHas('tasks', [
             'title' => $payload['title'],
+            'description' => $payload['description'],
             'user_id' => $user->id,
             'created_by_id' => $user->id,
             'due_date' => $payload['due_date'],
@@ -62,6 +63,7 @@ class TaskUpdateApiTest extends TestCase
 
         $this->assertDatabaseHas('tasks', [
             'title' => $payload['title'],
+            'description' => $payload['description'],
             'user_id' => $user->id,
             'created_by_id' => $user->id,
             'due_date' => $payload['due_date'],
@@ -112,6 +114,7 @@ class TaskUpdateApiTest extends TestCase
 
         $this->assertDatabaseHas('tasks', [
             'title' => $payload['title'],
+            'description' => $payload['description'],
             'user_id' => $user->id,
             'created_by_id' => $user->id,
             'due_date' => $payload['due_date'],
@@ -121,6 +124,7 @@ class TaskUpdateApiTest extends TestCase
 
         $this->assertDatabaseMissing('tasks', [
             'title' => $payload['title'],
+            'description' => $payload['description'],
             'user_id' => $payload['user_id'],
             'created_by_id' => $user->id,
             'due_date' => $payload['due_date'],
@@ -171,6 +175,7 @@ class TaskUpdateApiTest extends TestCase
 
         $this->assertDatabaseHas('tasks', [
             'title' => $payload['title'],
+            'description' => $payload['description'],
             'user_id' => $payload['user_id'],
             'created_by_id' => $user->id,
             'due_date' => $payload['due_date'],
@@ -194,6 +199,7 @@ class TaskUpdateApiTest extends TestCase
 
         $this->assertDatabaseHas('tasks', [
             'title' => $payload['title'],
+            'description' => $payload['description'],
             'user_id' => $payload['user_id'],
             'created_by_id' => $user->id,
             'due_date' => $payload['due_date'],

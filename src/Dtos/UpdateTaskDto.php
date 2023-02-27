@@ -11,9 +11,9 @@ class UpdateTaskDto extends CreateTaskDto implements DtoContract, InstantiateFro
 {
     private int $id;
 
-    public function __construct(int $id, string $title, ?Carbon $dueDate, ?string $relatedType, ?int $relatedId)
+    public function __construct(int $id, string $title, ?string $description, ?Carbon $dueDate, ?string $relatedType, ?int $relatedId)
     {
-        parent::__construct($title, $dueDate, $relatedType, $relatedId);
+        parent::__construct($title, $description, $dueDate, $relatedType, $relatedId);
 
         $this->id = $id;
     }
@@ -35,6 +35,7 @@ class UpdateTaskDto extends CreateTaskDto implements DtoContract, InstantiateFro
         return new static(
             $request->route('id'),
             $request->input('title'),
+            $request->input('description'),
             Carbon::parse($request->input('due_date')),
             $request->input('related_type'),
             $request->input('related_id'),

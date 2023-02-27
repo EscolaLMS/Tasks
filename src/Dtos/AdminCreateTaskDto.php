@@ -10,9 +10,9 @@ use Illuminate\Http\Request;
 class AdminCreateTaskDto extends CreateTaskDto implements DtoContract, InstantiateFromRequest
 {
 
-    public function __construct(string $title, ?int $userId, ?Carbon $dueDate, ?string $relatedType, ?int $relatedId)
+    public function __construct(string $title, ?string $description, ?int $userId, ?Carbon $dueDate, ?string $relatedType, ?int $relatedId)
     {
-        parent::__construct($title, $dueDate, $relatedType, $relatedId);
+        parent::__construct($title, $description, $dueDate, $relatedType, $relatedId);
 
         $this->userId = $userId ?? auth()->id();
     }
@@ -21,6 +21,7 @@ class AdminCreateTaskDto extends CreateTaskDto implements DtoContract, Instantia
     {
         return new static(
             $request->input('title'),
+            $request->input('description'),
             $request->input('user_id'),
             Carbon::parse($request->input('due_date')),
             $request->input('related_type'),
