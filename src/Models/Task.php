@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  *
  * @property int $id
  * @property string $title
+ * @property ?string $description
  * @property ?Carbon due_date
  * @property ?Carbon $completed_at
  * @property int $user_id

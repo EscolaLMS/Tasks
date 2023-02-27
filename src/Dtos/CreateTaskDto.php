@@ -12,6 +12,8 @@ class CreateTaskDto implements DtoContract, InstantiateFromRequest
 
     protected string $title;
 
+    protected ?string $description;
+
     protected int $userId;
 
     protected int $createdById;
@@ -22,9 +24,10 @@ class CreateTaskDto implements DtoContract, InstantiateFromRequest
 
     protected ?int $relatedId;
 
-    public function __construct(string $title, ?Carbon $dueDate, ?string $relatedType, ?int $relatedId)
+    public function __construct(string $title, ?string $description, ?Carbon $dueDate, ?string $relatedType, ?int $relatedId)
     {
         $this->title = $title;
+        $this->description = $description;
         $this->userId = auth()->id();
         $this->createdById = auth()->id();
         $this->dueDate = $dueDate;
@@ -35,6 +38,11 @@ class CreateTaskDto implements DtoContract, InstantiateFromRequest
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
     }
 
     public function getUserId(): int
@@ -66,6 +74,7 @@ class CreateTaskDto implements DtoContract, InstantiateFromRequest
     {
         return [
             'title' => $this->getTitle(),
+            'description' => $this->getDescription(),
             'user_id' => $this->getUserId(),
             'created_by_id' => $this->getCreatedById(),
             'due_date' => $this->getDueDate(),
@@ -78,6 +87,7 @@ class CreateTaskDto implements DtoContract, InstantiateFromRequest
     {
         return new static(
             $request->input('title'),
+            $request->input('description'),
             Carbon::parse($request->input('due_date')),
             $request->input('related_type'),
             $request->input('related_id'),

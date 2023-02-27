@@ -16,6 +16,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *          type="string"
  *      ),
  *      @OA\Property(
+ *          property="description",
+ *          description="description",
+ *          type="string"
+ *      ),
+ *      @OA\Property(
  *          property="related_type",
  *          description="related_type",
  *          type="string"
@@ -64,6 +69,7 @@ class TaskDetailsResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
+            'description' => $this->description,
             'user' => UserResource::make($this->user),
             'created_by' => UserResource::make($this->createdBy),
             'due_date' => $this->due_date,

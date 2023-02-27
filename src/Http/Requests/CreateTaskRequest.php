@@ -17,6 +17,11 @@ use Illuminate\Support\Facades\Gate;
  *          type="string"
  *      ),
  *      @OA\Property(
+ *          property="description",
+ *          description="description",
+ *          type="string"
+ *      ),
+ *      @OA\Property(
  *          property="related_type",
  *          description="related_type",
  *          type="string"
@@ -46,6 +51,7 @@ class CreateTaskRequest extends TaskRequest
     {
         return [
             'title' => ['required', 'string'],
+            'description' => ['nullable', 'string'],
             'related_type' => ['nullable', 'string', 'required_with:related_id'],
             'related_id' => ['nullable', 'integer', 'required_with:related_type'],
             'due_date' => ['date', 'after_or_equal:now'],
