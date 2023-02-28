@@ -1024,6 +1024,11 @@
                         "description": "note",
                         "type": "string"
                     },
+                    "created_at": {
+                        "description": "created_at",
+                        "type": "string",
+                        "format": "date-time"
+                    },
                     "user": {
                         "$ref": "#/components/schemas/UserResource"
                     },
