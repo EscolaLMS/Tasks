@@ -26,6 +26,8 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property int $created_by_id
  * @property ?string $related_type
  * @property ?int $related_id
+ * @property Carbon $created_at
+ * @property Carbon $update_at
  *
  * @property User $user
  * @property User $createdBy
@@ -55,7 +57,7 @@ class Task extends Model
 
     public function taskNotes(): HasMany
     {
-        return $this->hasMany(TaskNote::class);
+        return $this->hasMany(TaskNote::class)->orderBy('created_at', 'desc');
     }
 
     public function isAssigned(): bool
