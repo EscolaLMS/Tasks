@@ -1,6 +1,7 @@
 <?php
 
 use EscolaLms\Tasks\Http\Controllers\AdminTaskController;
+use EscolaLms\Tasks\Http\Controllers\AdminTaskNoteController;
 use EscolaLms\Tasks\Http\Controllers\TaskController;
 use EscolaLms\Tasks\Http\Controllers\TaskNoteController;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,12 @@ Route::prefix('api')
             Route::post('incomplete/{id}', [AdminTaskController::class, 'incomplete']);
             Route::get('', [AdminTaskController::class, 'findAll']);
             Route::get('{id}', [AdminTaskController::class, 'find']);
+
+            Route::prefix('notes')->group(function () {
+                Route::post(null, [AdminTaskNoteController::class, 'create']);
+                Route::patch('{id}', [AdminTaskNoteController::class, 'update']);
+                Route::delete('{id}', [AdminTaskNoteController::class, 'delete']);
+            });
         });
 
         Route::prefix('tasks')->group(function () {
