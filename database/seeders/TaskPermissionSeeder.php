@@ -25,9 +25,9 @@ class TaskPermissionSeeder extends Seeder
             TaskPermissionEnum::DELETE_OWN_TASK,
             TaskPermissionEnum::LIST_OWN_TASK,
             TaskPermissionEnum::FIND_OWN_TASK,
-            TaskPermissionEnum::CREATE_TASK_NOTE,
-            TaskPermissionEnum::UPDATE_TASK_NOTE,
-            TaskPermissionEnum::DELETE_TASK_NOTE,
+            TaskPermissionEnum::CREATE_OWN_TASK_NOTE,
+            TaskPermissionEnum::UPDATE_OWN_TASK_NOTE,
+            TaskPermissionEnum::DELETE_OWN_TASK_NOTE,
         ]);
     }
 }

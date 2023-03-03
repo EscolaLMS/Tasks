@@ -5,7 +5,7 @@ namespace EscolaLms\Tasks\Http\Requests;
 use EscolaLms\Tasks\Models\Task;
 use Illuminate\Foundation\Http\FormRequest;
 
-class TaskRequest extends FormRequest
+abstract class TaskRequest extends FormRequest
 {
     public function isOwner(?Task $task = null): bool
     {

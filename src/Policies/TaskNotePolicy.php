@@ -25,4 +25,19 @@ class TaskNotePolicy
     {
         return $user->can(TaskPermissionEnum::DELETE_TASK_NOTE);
     }
+
+    public function createOwn(User $user): bool
+    {
+        return $user->can(TaskPermissionEnum::CREATE_OWN_TASK_NOTE);
+    }
+
+    public function updateOwn(User $user, TaskNote $taskNote): bool
+    {
+        return $user->can(TaskPermissionEnum::UPDATE_OWN_TASK_NOTE);
+    }
+
+    public function deleteOwn(User $user, TaskNote $taskNote): bool
+    {
+        return $user->can(TaskPermissionEnum::DELETE_OWN_TASK_NOTE);
+    }
 }

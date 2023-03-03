@@ -6,7 +6,7 @@ use EscolaLms\Tasks\Models\Task;
 use EscolaLms\Tasks\Models\TaskNote;
 use Illuminate\Foundation\Http\FormRequest;
 
-class TaskNoteRequest extends TaskRequest
+abstract class TaskNoteRequest extends TaskRequest
 {
     public function getTaskNote(?int $taskNoteId = null): TaskNote
     {

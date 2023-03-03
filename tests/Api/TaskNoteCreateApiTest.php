@@ -142,4 +142,78 @@ class TaskNoteCreateApiTest extends TestCase
         $this->postJson('api/tasks/notes', $this->creationTaskNotePayload())
             ->assertUnauthorized();
     }
+
+    public function testAdminCreateTaskNote(): void
+    {
+        $user = $this->makeAdmin();
+        $payload = $this->creationTaskNotePayload();
+
+        $this->actingAs($user, 'api')
+            ->postJson('api/admin/tasks/notes', $payload)
+            ->assertCreated();
+
+        $this->assertDatabaseHas('task_notes', [
+            'note' => $payload['note'],
+            'task_id' => $payload['task_id'],
+            'user_id' => $user->getKey(),
+        ]);
+
+        Event::assertDispatched(TaskNoteCreatedEvent::class);
+    }
+
+    public function testAdminCreateTaskNoteNotifyCreatorTask(): void
+    {
+        $user = $this->makeAdmin();
+        $payload = $this->creationTaskNotePayload([], null, $user);
+
+        $response = $this->actingAs($user, 'api')
+            ->postJson('api/admin/tasks/notes', $payload)
+            ->assertCreated();
+
+        $taskNote = TaskNote::find($response->getData()->data->id);
+
+        Event::assertDispatched(TaskNoteCreatedEvent::class, function (TaskNoteEvent $event) use ($taskNote) {
+            return $taskNote->task->user_id === $event->getUser()->getKey() && $taskNote->getKey() === $event->getTaskNote()->getKey();
+        });
+    }
+
+    public function testAdminCreateTaskNoteNotifyAssignedUser(): void
+    {
+        $user = $this->makeAdmin();
+        $payload = $this->creationTaskNotePayload([], $user);
+
+        $response = $this->actingAs($user, 'api')
+            ->postJson('api/admin/tasks/notes', $payload)
+            ->assertCreated();
+
+        $taskNote = TaskNote::find($response->getData()->data->id);
+
+        Event::assertDispatched(TaskNoteCreatedEvent::class, function (TaskNoteEvent $event) use ($taskNote) {
+            return $taskNote->task->created_by_id === $event->getUser()->getKey() && $taskNote->getKey() === $event->getTaskNote()->getKey();
+        });
+    }
+
+    public function testAdminCreateTaskNoteTaskNotFound(): void
+    {
+        $user = $this->makeAdmin();
+        $payload = $this->creationTaskNotePayload(['task_id' => -123]);
+
+        $this->actingAs($user, 'api')
+            ->postJson('api/admin/tasks/notes', $payload)
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['task_id']);
+    }
+
+    public function testAdminCreateTaskNoteForbidden(): void
+    {
+        $this->actingAs($this->makeUser(), 'api')
+            ->postJson('api/admin/tasks/notes', $this->creationTaskNotePayload())
+            ->assertForbidden();
+    }
+
+    public function testAdminCreateTaskNoteUnauthorized(): void
+    {
+        $this->postJson('api/admin/tasks/notes', $this->creationTaskNotePayload())
+            ->assertUnauthorized();
+    }
 }

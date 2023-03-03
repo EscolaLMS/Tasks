@@ -91,4 +91,54 @@ class TaskNoteUpdateApiTest extends TestCase
         $this->patchJson('api/tasks/notes/' . TaskNote::factory()->create()->getKey(), $this->updateTaskNotePayload())
             ->assertUnauthorized();
     }
+
+    public function testAdminUpdateTaskNote(): void
+    {
+        $user = $this->makeAdmin();
+        $taskNote = TaskNote::factory()->create();
+        $payload = $this->updateTaskNotePayload(['task_id' => $taskNote->task->getKey()]);
+
+        $this->actingAs($user, 'api')
+            ->patchJson('api/admin/tasks/notes/' . $taskNote->getKey(), $payload)
+            ->assertOk();
+
+        $this->assertDatabaseHas('task_notes', [
+            'id' => $taskNote->getKey(),
+            'note' => $payload['note'],
+            'task_id' => $taskNote->task_id,
+            'user_id' => $user->getKey(),
+        ]);
+    }
+
+    public function testAdminUpdateTaskNoteInvalidData(): void
+    {
+        $user = $this->makeAdmin();
+        $taskNote = TaskNote::factory()->create();
+        $payload = $this->updateTaskNotePayload(['note' => null, 'task_id' => $taskNote->task->getKey()]);
+
+        $this->actingAs($user, 'api')
+            ->patchJson('api/admin/tasks/notes/' . $taskNote->getKey(), $payload)
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['note']);
+    }
+
+    public function testAdminUpdateTaskNoteNotFound(): void
+    {
+        $this->actingAs($this->makeAdmin(), 'api')
+            ->patchJson('api/admin/tasks/notes/' . 123, $this->updateTaskNotePayload())
+            ->assertNotFound();
+    }
+
+    public function testAdminUpdateTaskNoteForbidden(): void
+    {
+        $this->actingAs($this->makeUser(), 'api')
+            ->patchJson('api/admin/tasks/notes/' . TaskNote::factory()->create()->getKey(), $this->updateTaskNotePayload())
+            ->assertForbidden();
+    }
+
+    public function testAdminUpdateTaskNoteUnauthorized(): void
+    {
+        $this->patchJson('api/admin/tasks/notes/' . TaskNote::factory()->create()->getKey(), $this->updateTaskNotePayload())
+            ->assertUnauthorized();
+    }
 }

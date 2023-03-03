@@ -18,7 +18,11 @@ class TaskPermissionEnum extends BasicEnum
     const LIST_TASK = 'task_list';
     const FIND_TASK = 'task_find';
 
+    const CREATE_OWN_TASK_NOTE = 'task-note_create-own';
+    const UPDATE_OWN_TASK_NOTE = 'task-note_update-own';
+    const DELETE_OWN_TASK_NOTE = 'task-note_delete-own';
+
     const CREATE_TASK_NOTE = 'task-note_create';
-    const UPDATE_TASK_NOTE= 'task-note_update';
+    const UPDATE_TASK_NOTE = 'task-note_update';
     const DELETE_TASK_NOTE = 'task-note_delete';
 }
