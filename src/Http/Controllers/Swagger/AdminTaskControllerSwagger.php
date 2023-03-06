@@ -313,6 +313,26 @@ interface AdminTaskControllerSwagger
      *              type="integer",
      *          ),
      *      ),
+     *      @OA\Parameter(
+     *          name="due_date_from",
+     *          description="Due date from",
+     *          required=false,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string",
+     *              format="date-time",
+     *          ),
+     *      ),
+     *      @OA\Parameter(
+     *          name="due_date_to",
+     *          description="Due date to",
+     *          required=false,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string",
+     *              format="date-time",
+     *          ),
+     *      ),
      *      @OA\Response(
      *          response=200,
      *          description="successful operation",

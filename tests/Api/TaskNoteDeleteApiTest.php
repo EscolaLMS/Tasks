@@ -42,9 +42,7 @@ class TaskNoteDeleteApiTest extends TestCase
     public function testDeleteTaskNoteNotOwner(): void
     {
         $user = $this->makeStudent();
-        $taskNote = TaskNote::factory()
-            ->has(Task::factory())
-            ->create();
+        $taskNote = TaskNote::factory()->create();
 
         $this->actingAs($user, 'api')
             ->deleteJson('api/tasks/notes/' . $taskNote->getKey())
@@ -68,6 +66,40 @@ class TaskNoteDeleteApiTest extends TestCase
     public function testUpdateTaskNoteUnauthorized(): void
     {
         $this->deleteJson('api/tasks/notes/' . TaskNote::factory()->create()->getKey())
+            ->assertUnauthorized();
+    }
+
+    public function testAdminDeleteTaskNote(): void
+    {
+        $user = $this->makeAdmin();
+        $taskNote = TaskNote::factory()->create();
+
+        $this->actingAs($user, 'api')
+            ->deleteJson('api/admin/tasks/notes/' . $taskNote->getKey())
+            ->assertOk();
+
+        $this->assertDatabaseMissing('task_notes', [
+            'id' => $taskNote->getKey(),
+        ]);
+    }
+
+    public function testAdminUpdateTaskNoteNotFound(): void
+    {
+        $this->actingAs($this->makeAdmin(), 'api')
+            ->deleteJson('api/admin/tasks/notes/' . 123)
+            ->assertNotFound();
+    }
+
+    public function testAdminUpdateTaskNoteForbidden(): void
+    {
+        $this->actingAs($this->makeUser(), 'api')
+            ->deleteJson('api/admin/tasks/notes/' . TaskNote::factory()->create()->getKey())
+            ->assertForbidden();
+    }
+
+    public function testAdminUpdateTaskNoteUnauthorized(): void
+    {
+        $this->deleteJson('api/admin/tasks/notes/' . TaskNote::factory()->create()->getKey())
             ->assertUnauthorized();
     }
 }

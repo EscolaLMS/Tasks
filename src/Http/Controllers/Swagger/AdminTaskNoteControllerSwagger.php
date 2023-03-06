@@ -2,9 +2,9 @@
 
 namespace EscolaLms\Tasks\Http\Controllers\Swagger;
 
-use EscolaLms\Tasks\Http\Requests\CreateTaskNoteRequest;
-use EscolaLms\Tasks\Http\Requests\DeleteTaskNoteRequest;
-use EscolaLms\Tasks\Http\Requests\UpdateTaskNoteRequest;
+use EscolaLms\Tasks\Http\Requests\Admin\AdminCreateTaskNoteRequest;
+use EscolaLms\Tasks\Http\Requests\Admin\AdminDeleteTaskNoteRequest;
+use EscolaLms\Tasks\Http\Requests\Admin\AdminUpdateTaskNoteRequest;
 use Illuminate\Http\JsonResponse;
 
 interface AdminTaskNoteControllerSwagger
@@ -50,7 +50,7 @@ interface AdminTaskNoteControllerSwagger
      *      )
      * )
      */
-    public function create(CreateTaskNoteRequest $request): JsonResponse;
+    public function create(AdminCreateTaskNoteRequest $request): JsonResponse;
 
     /**
      * @OA\Patch(
@@ -101,7 +101,7 @@ interface AdminTaskNoteControllerSwagger
      *      )
      * )
      */
-    public function update(UpdateTaskNoteRequest $request): JsonResponse;
+    public function update(AdminUpdateTaskNoteRequest $request): JsonResponse;
 
     /**
      * @OA\Delete(
@@ -145,5 +145,5 @@ interface AdminTaskNoteControllerSwagger
      *      )
      * )
      */
-    public function delete(DeleteTaskNoteRequest $request): JsonResponse;
+    public function delete(AdminDeleteTaskNoteRequest $request): JsonResponse;
 }

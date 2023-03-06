@@ -12,7 +12,7 @@ class DeleteTaskNoteRequest extends TaskNoteRequest
     {
         $taskNote = $this->getTaskNote($this->route('id'));
 
-        return Gate::allows('delete', $taskNote) && $this->isTaskNoteOwner($taskNote);
+        return Gate::allows('deleteOwn', $taskNote) && $this->isTaskNoteOwner($taskNote);
     }
 
     public function getId(): ?int

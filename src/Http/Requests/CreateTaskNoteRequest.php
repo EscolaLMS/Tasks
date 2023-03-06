@@ -30,7 +30,7 @@ class CreateTaskNoteRequest extends TaskNoteRequest
     {
         $task = $this->getTask($this->input('task_id'));
 
-        return Gate::allows('create', TaskNote::class) && ($this->isCreator($task) || $this->isAssigned($task));
+        return Gate::allows('createOwn', TaskNote::class) && ($this->isCreator($task) || $this->isAssigned($task));
     }
 
     public function rules(): array

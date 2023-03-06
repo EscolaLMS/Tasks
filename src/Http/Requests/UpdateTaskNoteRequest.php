@@ -2,9 +2,7 @@
 
 namespace EscolaLms\Tasks\Http\Requests;
 
-use EscolaLms\Tasks\Dtos\CreateTaskNoteDto;
 use EscolaLms\Tasks\Dtos\UpdateTaskNoteDto;
-use EscolaLms\Tasks\Models\TaskNote;
 use Illuminate\Support\Facades\Gate;
 
 class UpdateTaskNoteRequest extends CreateTaskNoteRequest
@@ -15,7 +13,7 @@ class UpdateTaskNoteRequest extends CreateTaskNoteRequest
             $this->route('id')
         );
 
-        return Gate::allows('update', $taskNote) && $this->isTaskNoteOwner($taskNote);
+        return Gate::allows('updateOwn', $taskNote) && $this->isTaskNoteOwner($taskNote);
     }
 
     public function toDto(): UpdateTaskNoteDto
