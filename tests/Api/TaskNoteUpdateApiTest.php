@@ -61,9 +61,7 @@ class TaskNoteUpdateApiTest extends TestCase
     public function testUpdateTaskNoteNotOwner(): void
     {
         $user = $this->makeStudent();
-        $taskNote = TaskNote::factory()
-            ->has(Task::factory())
-            ->create();
+        $taskNote = TaskNote::factory()->create();
         $task = $taskNote->task;
         $payload = $this->updateTaskNotePayload(['task_id' => $task->getKey()]);
 

@@ -42,9 +42,7 @@ class TaskNoteDeleteApiTest extends TestCase
     public function testDeleteTaskNoteNotOwner(): void
     {
         $user = $this->makeStudent();
-        $taskNote = TaskNote::factory()
-            ->has(Task::factory())
-            ->create();
+        $taskNote = TaskNote::factory()->create();
 
         $this->actingAs($user, 'api')
             ->deleteJson('api/tasks/notes/' . $taskNote->getKey())
@@ -74,9 +72,7 @@ class TaskNoteDeleteApiTest extends TestCase
     public function testAdminDeleteTaskNote(): void
     {
         $user = $this->makeAdmin();
-        $taskNote = TaskNote::factory()
-            ->has(Task::factory())
-            ->create();
+        $taskNote = TaskNote::factory()->create();
 
         $this->actingAs($user, 'api')
             ->deleteJson('api/admin/tasks/notes/' . $taskNote->getKey())

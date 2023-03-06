@@ -164,7 +164,7 @@ class TaskNoteCreateApiTest extends TestCase
     public function testAdminCreateTaskNoteNotifyCreatorTask(): void
     {
         $user = $this->makeAdmin();
-        $payload = $this->creationTaskNotePayload([], null, $user);
+        $payload = $this->creationTaskNotePayload();
 
         $response = $this->actingAs($user, 'api')
             ->postJson('api/admin/tasks/notes', $payload)
