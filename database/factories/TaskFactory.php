@@ -19,6 +19,7 @@ class TaskFactory extends Factory
         return [
             'title' => $this->faker->word,
             'description' => $this->faker->text,
+            'type' => $this->faker->word,
             'due_date' => Carbon::now(),
             'completed_at' => null,
             'user_id' => User::factory()->state(['email' => $this->faker->unique()->email]),

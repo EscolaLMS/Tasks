@@ -21,6 +21,9 @@ class CriteriaDto extends BaseCriteriaDto implements DtoContract, InstantiateFro
         if ($request->get('title')) {
             $criteria->push(new LikeCriterion('title', $request->get('title')));
         }
+        if ($request->get('type')) {
+            $criteria->push(new EqualCriterion('type', $request->get('type')));
+        }
         if ($request->get('user_id')) {
             $criteria->push(new EqualCriterion('user_id', $request->get('user_id')));
         }
