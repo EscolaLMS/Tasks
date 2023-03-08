@@ -44,6 +44,15 @@
                         }
                     },
                     {
+                        "name": "type",
+                        "in": "query",
+                        "description": "Task type",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "user_id",
                         "in": "query",
                         "description": "Task user_id",
@@ -575,6 +584,15 @@
                         }
                     },
                     {
+                        "name": "type",
+                        "in": "query",
+                        "description": "Task type",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "user_id",
                         "in": "query",
                         "description": "Task user_id",
@@ -1073,6 +1091,10 @@
                         "description": "description",
                         "type": "string"
                     },
+                    "type": {
+                        "description": "type",
+                        "type": "string"
+                    },
                     "related_type": {
                         "description": "related_type",
                         "type": "string"
@@ -1123,6 +1145,10 @@
                         "description": "description",
                         "type": "string"
                     },
+                    "type": {
+                        "description": "type",
+                        "type": "string"
+                    },
                     "related_type": {
                         "description": "related_type",
                         "type": "string"
@@ -1152,6 +1178,10 @@
                     },
                     "description": {
                         "description": "description",
+                        "type": "string"
+                    },
+                    "type": {
+                        "description": "type",
                         "type": "string"
                     },
                     "related_type": {
@@ -1231,6 +1261,10 @@
                     },
                     "description": {
                         "description": "description",
+                        "type": "string"
+                    },
+                    "type": {
+                        "description": "type",
                         "type": "string"
                     },
                     "related_type": {
