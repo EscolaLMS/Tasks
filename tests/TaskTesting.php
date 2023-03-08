@@ -19,6 +19,7 @@ trait TaskTesting
         $payload = [
             'title' => $this->faker->word,
             'description' => $this->faker->text,
+            'type' => $this->faker->word,
             'due_date' => Carbon::now()->addDay(),
             'related_type' => 'EscolaLms\\' . $type . '\\Models\\' . $type,
             'related_id' => $this->faker->randomNumber(),
@@ -34,6 +35,7 @@ trait TaskTesting
         $payload = [
             'title' => $this->faker->word,
             'description' => $this->faker->text,
+            'type' => $this->faker->word,
             'user_id' => User::factory()->create(['email' => $this->faker->email . Carbon::now()->getTimestamp()])->getKey(),
             'due_date' => Carbon::now()->addDay(),
             'related_type' => 'EscolaLms\\' . $type . '\\Models\\' . $type,
@@ -75,5 +77,21 @@ trait TaskTesting
         }
 
         return $uri;
+    }
+
+    public function assertDatabaseHasTask(array $data, ?array $additional = []): void
+    {
+        $assert = array_merge([
+            'title' => $data['title'],
+            'description' => $data['description'],
+            'type' => $data['type'],
+            'user_id' => $data['user_id'] ?? null,
+            'created_by_id' => $data['created_by'] ?? null,
+            'due_date' => $data['due_date'],
+            'related_type' => $data['related_type'],
+            'related_id' => $data['related_id'],
+        ], $additional);
+
+        $this->assertDatabaseHas('tasks', $assert);
     }
 }

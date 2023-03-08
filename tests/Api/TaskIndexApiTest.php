@@ -36,6 +36,8 @@ class TaskIndexApiTest extends TestCase
             ->assertJsonStructure(['data' => [[
                 'id',
                 'title',
+                'description',
+                'type',
                 'user' => [
                     'id',
                     'first_name',
@@ -198,6 +200,23 @@ class TaskIndexApiTest extends TestCase
                     return $tasks;
                 }),
                 'filterCount' => 4
+            ],
+            [
+                'filter' => [
+                    'type' => 'self-study',
+                ],
+                'data' => (function(int $userId) {
+                    $tasks = collect();
+                    $tasks->push(Task::factory());
+                    $tasks->push(Task::factory()->state(['type' => 'self-study', 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['type' => 'type1', 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['type' => 'type1', 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['type' => 'self-study']));
+                    $tasks->push(Task::factory()->state(['type' => 'self-study']));
+
+                    return $tasks;
+                }),
+                'filterCount' => 1
             ]
         ];
     }
@@ -218,6 +237,8 @@ class TaskIndexApiTest extends TestCase
             ->assertJsonStructure(['data' => [[
                 'id',
                 'title',
+                'description',
+                'type',
                 'user' => [
                     'id',
                     'first_name',
@@ -433,6 +454,25 @@ class TaskIndexApiTest extends TestCase
                     return $tasks;
                 }),
                 'filterCount' => 5
+            ],
+            [
+                'filter' => (function($params) {
+                    return [
+                        'type' => 'self-study',
+                    ];
+                }),
+                'data' => (function(int $userId) {
+                    $tasks = collect();
+                    $tasks->push(Task::factory()->state(['type' => 'self-study']));
+                    $tasks->push(Task::factory()->state(['type' => 'self-study']));
+                    $tasks->push(Task::factory()->state(['type' => 'type1']));
+                    $tasks->push(Task::factory());
+                    $tasks->push(Task::factory());
+                    $tasks->push(Task::factory());
+
+                    return $tasks;
+                }),
+                'filterCount' => 2
             ]
         ];
     }
@@ -531,6 +571,8 @@ class TaskIndexApiTest extends TestCase
                 'data' => [
                     'id',
                     'title',
+                    'description',
+                    'type',
                     'user' => [
                         'id',
                         'first_name',
@@ -565,6 +607,8 @@ class TaskIndexApiTest extends TestCase
                 'data' => [
                     'id',
                     'title',
+                    'description',
+                    'type',
                     'user' => [
                         'id',
                         'first_name',
@@ -626,6 +670,8 @@ class TaskIndexApiTest extends TestCase
                 'data' => [
                     'id',
                     'title',
+                    'description',
+                    'type',
                     'user' => [
                         'id',
                         'first_name',
@@ -694,6 +740,8 @@ class TaskIndexApiTest extends TestCase
                 'data' => [
                     'id',
                     'title',
+                    'description',
+                    'type',
                     'user' => [
                         'id',
                         'first_name',
@@ -735,6 +783,8 @@ class TaskIndexApiTest extends TestCase
                 'data' => [
                     'id',
                     'title',
+                    'description',
+                    'type',
                     'user' => [
                         'id',
                         'first_name',
@@ -779,6 +829,8 @@ class TaskIndexApiTest extends TestCase
                 'data' => [
                     'id',
                     'title',
+                    'description',
+                    'type',
                     'user' => [
                         'id',
                         'first_name',

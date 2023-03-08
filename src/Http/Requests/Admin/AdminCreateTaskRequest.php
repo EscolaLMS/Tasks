@@ -23,6 +23,11 @@ use Illuminate\Support\Facades\Gate;
  *          type="string"
  *      ),
  *      @OA\Property(
+ *          property="type",
+ *          description="type",
+ *          type="string"
+ *      ),
+ *      @OA\Property(
  *          property="related_type",
  *          description="related_type",
  *          type="string"
@@ -58,6 +63,7 @@ class AdminCreateTaskRequest extends TaskRequest
         return [
             'title' => ['required', 'string'],
             'description' => ['nullable', 'string'],
+            'type' => ['nullable', 'string'],
             'related_type' => ['nullable', 'string', 'required_with:related_id'],
             'related_id' => ['nullable', 'integer', 'required_with:related_type'],
             'user_id' => ['required', 'integer', 'exists:users,id'],

@@ -34,15 +34,7 @@ class TaskUpdateApiTest extends TestCase
             ->patchJson('api/tasks/' . $task->getKey(), $payload)
             ->assertOk();
 
-        $this->assertDatabaseHas('tasks', [
-            'title' => $payload['title'],
-            'description' => $payload['description'],
-            'user_id' => $user->id,
-            'created_by_id' => $user->id,
-            'due_date' => $payload['due_date'],
-            'related_type' => $payload['related_type'],
-            'related_id' => $payload['related_id'],
-        ]);
+        $this->assertDatabaseHasTask($payload, ['user_id' => $user->id, 'created_by_id' => $user->id,]);
     }
 
     public function testUserUpdateTaskNullableRelated(): void
@@ -61,14 +53,11 @@ class TaskUpdateApiTest extends TestCase
             ->patchJson('api/tasks/' . $task->getKey(), $payload)
             ->assertOk();
 
-        $this->assertDatabaseHas('tasks', [
-            'title' => $payload['title'],
-            'description' => $payload['description'],
+        $this->assertDatabaseHasTask($payload, [
             'user_id' => $user->id,
             'created_by_id' => $user->id,
-            'due_date' => $payload['due_date'],
             'related_type' => null,
-            'related_id' => null
+            'related_id' => null,
         ]);
     }
 
@@ -112,19 +101,12 @@ class TaskUpdateApiTest extends TestCase
             ->patchJson('api/tasks/' . $task->getKey(), $payload)
             ->assertOk();
 
-        $this->assertDatabaseHas('tasks', [
-            'title' => $payload['title'],
-            'description' => $payload['description'],
-            'user_id' => $user->id,
-            'created_by_id' => $user->id,
-            'due_date' => $payload['due_date'],
-            'related_type' => $payload['related_type'],
-            'related_id' => $payload['related_id'],
-        ]);
+        $this->assertDatabaseHasTask($payload, ['user_id' => $user->id, 'created_by_id' => $user->id,]);
 
         $this->assertDatabaseMissing('tasks', [
             'title' => $payload['title'],
             'description' => $payload['description'],
+            'type' => $payload['type'],
             'user_id' => $payload['user_id'],
             'created_by_id' => $user->id,
             'due_date' => $payload['due_date'],
@@ -173,15 +155,7 @@ class TaskUpdateApiTest extends TestCase
             ->patchJson('api/admin/tasks/' . $task->getKey(), $payload)
             ->assertOk();
 
-        $this->assertDatabaseHas('tasks', [
-            'title' => $payload['title'],
-            'description' => $payload['description'],
-            'user_id' => $payload['user_id'],
-            'created_by_id' => $user->id,
-            'due_date' => $payload['due_date'],
-            'related_type' => $payload['related_type'],
-            'related_id' => $payload['related_id'],
-        ]);
+        $this->assertDatabaseHasTask($payload, ['created_by_id' => $user->id,]);
     }
 
     public function testAdminUpdateTaskNullableRelated(): void
@@ -197,12 +171,8 @@ class TaskUpdateApiTest extends TestCase
             ->patchJson('api/admin/tasks/' . $task->getKey(), $payload)
             ->assertOk();
 
-        $this->assertDatabaseHas('tasks', [
-            'title' => $payload['title'],
-            'description' => $payload['description'],
-            'user_id' => $payload['user_id'],
+        $this->assertDatabaseHasTask($payload, [
             'created_by_id' => $user->id,
-            'due_date' => $payload['due_date'],
             'related_type' => null,
             'related_id' => null,
         ]);
@@ -249,4 +219,5 @@ class TaskUpdateApiTest extends TestCase
             ->patchJson('api/admin/tasks/' . Task::factory()->create()->getKey(), $this->adminCreationPayload())
             ->assertForbidden();
     }
+
 }

@@ -278,6 +278,15 @@ interface AdminTaskControllerSwagger
      *          ),
      *      ),
      *      @OA\Parameter(
+     *          name="type",
+     *          description="Task type",
+     *          required=false,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string",
+     *          ),
+     *      ),
+     *      @OA\Parameter(
      *          name="user_id",
      *          description="Task user_id",
      *          required=false,

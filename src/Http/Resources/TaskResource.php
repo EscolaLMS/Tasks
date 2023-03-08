@@ -21,6 +21,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *          type="string"
  *      ),
  *      @OA\Property(
+ *          property="type",
+ *          description="type",
+ *          type="string"
+ *      ),
+ *      @OA\Property(
  *          property="related_type",
  *          description="related_type",
  *          type="string"
@@ -70,6 +75,7 @@ class TaskResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
+            'type' => $this->type,
             'user' => UserResource::make($this->user),
             'created_by' => UserResource::make($this->createdBy),
             'due_date' => $this->due_date,

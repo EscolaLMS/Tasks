@@ -31,14 +31,9 @@ class TaskCreateApiTest extends TestCase
             ->postJson('api/tasks', $payload)
             ->assertCreated();
 
-        $this->assertDatabaseHas('tasks', [
-            'title' => $payload['title'],
-            'description' => $payload['description'],
+        $this->assertDatabaseHasTask($payload, [
             'user_id' => $user->id,
             'created_by_id' => $user->id,
-            'due_date' => $payload['due_date'],
-            'related_type' => $payload['related_type'],
-            'related_id' => $payload['related_id'],
         ]);
 
         Event::assertNotDispatched(TaskAssignedEvent::class);
@@ -56,12 +51,9 @@ class TaskCreateApiTest extends TestCase
             ->postJson('api/tasks', $payload)
             ->assertCreated();
 
-        $this->assertDatabaseHas('tasks', [
-            'title' => $payload['title'],
-            'description' => $payload['description'],
+        $this->assertDatabaseHasTask($payload, [
             'user_id' => $user->id,
             'created_by_id' => $user->id,
-            'due_date' => $payload['due_date'],
             'related_type' => null,
             'related_id' => null,
         ]);
@@ -103,14 +95,9 @@ class TaskCreateApiTest extends TestCase
             ->postJson('api/tasks', $payload)
             ->assertCreated();
 
-        $this->assertDatabaseHas('tasks', [
-            'title' => $payload['title'],
-            'description' => $payload['description'],
+        $this->assertDatabaseHasTask($payload, [
             'user_id' => $user->id,
             'created_by_id' => $user->id,
-            'due_date' => $payload['due_date'],
-            'related_type' => $payload['related_type'],
-            'related_id' => $payload['related_id'],
         ]);
 
         $this->assertDatabaseMissing('tasks', [
@@ -159,14 +146,8 @@ class TaskCreateApiTest extends TestCase
             ->postJson('api/admin/tasks', $payload)
             ->assertCreated();
 
-        $this->assertDatabaseHas('tasks', [
-            'title' => $payload['title'],
-            'description' => $payload['description'],
-            'user_id' => $payload['user_id'],
+        $this->assertDatabaseHasTask($payload, [
             'created_by_id' => $user->id,
-            'due_date' => $payload['due_date'],
-            'related_type' => $payload['related_type'],
-            'related_id' => $payload['related_id'],
         ]);
 
         Event::assertDispatched(TaskAssignedEvent::class);
@@ -184,12 +165,8 @@ class TaskCreateApiTest extends TestCase
             ->postJson('api/admin/tasks', $payload)
             ->assertCreated();
 
-        $this->assertDatabaseHas('tasks', [
-            'title' => $payload['title'],
-            'description' => $payload['description'],
-            'user_id' => $payload['user_id'],
+        $this->assertDatabaseHasTask($payload, [
             'created_by_id' => $user->id,
-            'due_date' => $payload['due_date'],
             'related_type' => null,
             'related_id' => null,
         ]);
