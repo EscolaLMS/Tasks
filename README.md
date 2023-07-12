@@ -27,7 +27,7 @@ No notifications will be sent for tasks older than 30 days.
 ## Configuration
 In the configuration, you can specify the period until when notifications about overdue tasks should be sent.
 Parametr możesz określić z poziomu pliku config.php lub ustawień administracyjnych systemu.
-You can specify the parameter from the [config.php file](src/config.php) or [system administration settings](src/Providers/SerringsServiceProvider.php).
+You can specify the parameter from the [config.php file](src/config.php) or [system administration settings](src/Providers/SettingsServiceProvider.php).
 
 #### Example config.php
 ```php
