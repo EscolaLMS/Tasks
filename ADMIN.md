@@ -1,3 +1,19 @@
+# Front app documentation
+To view saved tasks, access your user profile and go to the "My Tasks" section.
+
+![Tasks - My profile](https://github.com/EscolaLMS/Tasks/assets/59400506/bf0a28d3-64e5-45bc-af4d-a4c03f60d8f5)
+
+The user can view all tasks or filter by time (for today, upcoming, overdue). From the list the user can add, edit or delete tasks. The user can also mark tasks as completed or send a request to check the correctness of a task.
+
+![Tasks - list assigned](https://github.com/EscolaLMS/Tasks/assets/59400506/b9712574-824b-4f25-bbf8-de60f0aac6a3)
+
+
+When adding or editing a task, the user can choose which resource the task applies to.
+From the frontend application, users can create only their own tasks, without the ability to assign tasks to other system users.
+
+![Task - form self task](https://github.com/EscolaLMS/Tasks/assets/59400506/1478a60f-5e69-485c-aee8-1ad57879900d)
+
+
 # Admin panel documentation
 
 ## Tasks
