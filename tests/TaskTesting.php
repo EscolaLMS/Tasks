@@ -73,7 +73,14 @@ trait TaskTesting
         $uri = $prefix . '?';
 
         foreach ($filters as $key => $value) {
-            $uri .= $key . '=' . $value . '&';
+            if (is_array($value)) {
+                foreach ($value as $v) {
+                    $uri .= $key . '[]=' . $v . '&';
+                }
+            }
+            else {
+                $uri .= $key . '=' . $value . '&';
+            }
         }
 
         return $uri;

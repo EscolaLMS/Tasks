@@ -35,6 +35,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *          description="related_id",
  *          type="integer"
  *      ),
+ *     @OA\Property(
+ *          property="related",
+ *          description="realted",
+ *          type="object"
+ *      ),
  *      @OA\Property(
  *          property="user",
  *          ref="#/components/schemas/UserResource"
@@ -71,6 +76,8 @@ class TaskResource extends JsonResource
 {
     public function toArray($request): array
     {
+        $resourceClass = ('\EscolaLms\Tasks\Http\Resources\\' . class_basename($this->related_type) . 'Resource');
+
         return [
             'id' => $this->id,
             'title' => $this->title,
@@ -82,6 +89,7 @@ class TaskResource extends JsonResource
             'completed_at' => $this->completed_at,
             'related_type' => $this->related_type,
             'related_id' => $this->related_id,
+            'related' => class_exists($resourceClass) && $this->related ? $resourceClass::make($this->related) : null,
             'has_notes' => $this->taskNotes->count() > 0
         ];
     }
