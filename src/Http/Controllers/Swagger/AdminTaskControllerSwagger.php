@@ -323,6 +323,13 @@ interface AdminTaskControllerSwagger
      *          ),
      *      ),
      *      @OA\Parameter(
+     *          name="related_ids[]",
+     *          description="An array of related_id",
+     *          required=false,
+     *          in="query",
+     *          @OA\Schema(type="array", @OA\Items(type="number")),
+     *      ),
+     *      @OA\Parameter(
      *          name="due_date_from",
      *          description="Due date from",
      *          required=false,

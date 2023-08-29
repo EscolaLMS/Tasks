@@ -70,13 +70,7 @@ trait TaskTesting
     }
 
     public function prepareUri(string $prefix, array $filters): string {
-        $uri = $prefix . '?';
-
-        foreach ($filters as $key => $value) {
-            $uri .= $key . '=' . $value . '&';
-        }
-
-        return $uri;
+        return $prefix . '?' . http_build_query($filters);
     }
 
     public function assertDatabaseHasTask(array $data, ?array $additional = []): void

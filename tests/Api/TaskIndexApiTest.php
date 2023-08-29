@@ -2,6 +2,9 @@
 
 namespace EscolaLms\Tasks\Tests\Api;
 
+use EscolaLms\Courses\Models\Course;
+use EscolaLms\Courses\Models\Lesson;
+use EscolaLms\Courses\Models\Topic;
 use EscolaLms\Tasks\Database\Seeders\TaskPermissionSeeder;
 use EscolaLms\Tasks\Models\Task;
 use EscolaLms\Tasks\Models\TaskNote;
@@ -52,6 +55,7 @@ class TaskIndexApiTest extends TestCase
                 'completed_at',
                 'related_type',
                 'related_id',
+                'related',
             ]]]);
     }
 
@@ -108,8 +112,51 @@ class TaskIndexApiTest extends TestCase
             ],
             [
                 'filter' => [
-                    'due_date_from' => Carbon::now()->startOfDay(),
-                    'due_date_to' => Carbon::now()->endOfDay(),
+                    'related_type' => 'EscolaLms\\Courses\\Models\\Topic',
+                    'related_ids' => [123, 456, 789],
+                ],
+                'data' => (function(int $userId) {
+                    $tasks = collect();
+                    $tasks->push(Task::factory());
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Topic', 'related_id' => 123, 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Topic', 'related_id' => 456, 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Topic', 'related_id' => 789, 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Course', 'related_id' => 789, 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Topic', 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Course', 'user_id' => $userId]));
+
+                    return $tasks;
+                }),
+                'filterCount' => 3
+            ],
+            [
+                'filter' => [
+                    'related_typed_ids' => [
+                        'EscolaLms\\Courses\\Models\\Course' => [
+                            123
+                        ],
+                        'EscolaLms\\Courses\\Models\\Topic' => [
+                            456, 789
+                        ]
+                    ],
+                ],
+                'data' => (function(int $userId) {
+                    $tasks = collect();
+                    $tasks->push(Task::factory());
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Course', 'related_id' => 123, 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Topic', 'related_id' => 456, 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Topic', 'related_id' => 789, 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Topic', 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Course', 'user_id' => $userId]));
+
+                    return $tasks;
+                }),
+                'filterCount' => 3
+            ],
+            [
+                'filter' => [
+                    'due_date_from' => Carbon::now()->startOfDay()->toString(),
+                    'due_date_to' => Carbon::now()->endOfDay()->toString(),
                 ],
                 'data' => (function(int $userId) {
                     $tasks = collect();
@@ -128,7 +175,7 @@ class TaskIndexApiTest extends TestCase
             ],
             [
                 'filter' => [
-                    'due_date_from' => Carbon::now()->addDays(3)->startOfDay(),
+                    'due_date_from' => Carbon::now()->addDays(3)->startOfDay()->toString(),
                 ],
                 'data' => (function(int $userId) {
                     $tasks = collect();
@@ -147,7 +194,7 @@ class TaskIndexApiTest extends TestCase
             ],
             [
                 'filter' => [
-                    'due_date_from' => Carbon::now()->startOfDay(),
+                    'due_date_from' => Carbon::now()->startOfDay()->toString(),
                 ],
                 'data' => (function(int $userId) {
                     $tasks = collect();
@@ -164,7 +211,7 @@ class TaskIndexApiTest extends TestCase
             ],
             [
                 'filter' => [
-                    'due_date_to' => Carbon::now()->subDays(3)->startOfDay(),
+                    'due_date_to' => Carbon::now()->subDays(3)->startOfDay()->toString(),
                 ],
                 'data' => (function(int $userId) {
                     $tasks = collect();
@@ -184,7 +231,7 @@ class TaskIndexApiTest extends TestCase
             ],
             [
                 'filter' => [
-                    'due_date_to' => Carbon::now()->endOfDay(),
+                    'due_date_to' => Carbon::now()->endOfDay()->toString(),
                 ],
                 'data' => (function(int $userId) {
                     $tasks = collect();
@@ -253,6 +300,7 @@ class TaskIndexApiTest extends TestCase
                 'completed_at',
                 'related_type',
                 'related_id',
+                'related'
             ]]]);
     }
 
@@ -317,6 +365,53 @@ class TaskIndexApiTest extends TestCase
             [
                 'filter' => (function($params) {
                     return [
+                        'related_type' => 'EscolaLms\\Courses\\Models\\Topic',
+                        'related_ids' => [123, 456, 789],
+                    ];
+                }),
+                'data' => (function(int $userId) {
+                    $tasks = collect();
+                    $tasks->push(Task::factory());
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Topic', 'related_id' => 123]));
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Topic', 'related_id' => 456]));
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Topic', 'related_id' => 789]));
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Course', 'related_id' => 789]));
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Topic', 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Course', 'user_id' => $userId]));
+
+                    return $tasks;
+                }),
+                'filterCount' => 3
+            ],
+            [
+                'filter' => (function($params) {
+                    return [
+                        'related_typed_ids' => [
+                            'EscolaLms\\Courses\\Models\\Course' => [
+                                123
+                            ],
+                            'EscolaLms\\Courses\\Models\\Topic' => [
+                                456, 789
+                            ]
+                        ],
+                    ];
+                }),
+                'data' => (function(int $userId) {
+                    $tasks = collect();
+                    $tasks->push(Task::factory());
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Course', 'related_id' => 123]));
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Topic', 'related_id' => 456]));
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Topic', 'related_id' => 789]));
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Topic', 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Course', 'user_id' => $userId]));
+
+                    return $tasks;
+                }),
+                'filterCount' => 3
+            ],
+            [
+                'filter' => (function($params) {
+                    return [
                         'user_id' => $params
                     ];
                 }),
@@ -353,8 +448,8 @@ class TaskIndexApiTest extends TestCase
             [
                 'filter' =>  (function($params) {
                     return [
-                        'due_date_from' => Carbon::now()->startOfDay(),
-                        'due_date_to' => Carbon::now()->endOfDay(),
+                        'due_date_from' => Carbon::now()->startOfDay()->toString(),
+                        'due_date_to' => Carbon::now()->endOfDay()->toString(),
                     ];
                 }),
                 'data' => (function(int $userId) {
@@ -375,7 +470,7 @@ class TaskIndexApiTest extends TestCase
             [
                 'filter' =>  (function($params) {
                     return [
-                        'due_date_from' => Carbon::now()->addDays(3)->startOfDay(),
+                        'due_date_from' => Carbon::now()->addDays(3)->startOfDay()->toString(),
                     ];
                 }),
                 'data' => (function(int $userId) {
@@ -396,7 +491,7 @@ class TaskIndexApiTest extends TestCase
             [
                 'filter' => (function($params) {
                     return [
-                        'due_date_from' => Carbon::now()->startOfDay(),
+                        'due_date_from' => Carbon::now()->startOfDay()->toString(),
                     ];
                 }),
                 'data' => (function(int $userId) {
@@ -415,7 +510,7 @@ class TaskIndexApiTest extends TestCase
             [
                 'filter' => (function($params) {
                     return [
-                        'due_date_to' => Carbon::now()->subDays(3)->startOfDay(),
+                        'due_date_to' => Carbon::now()->subDays(3)->startOfDay()->toString(),
                     ];
                 }),
                 'data' => (function(int $userId) {
@@ -437,7 +532,7 @@ class TaskIndexApiTest extends TestCase
             [
                 'filter' => (function($params) {
                     return [
-                        'due_date_to' => Carbon::now()->endOfDay(),
+                        'due_date_to' => Carbon::now()->endOfDay()->toString(),
                     ];
                 }),
                 'data' => (function(int $userId) {
@@ -587,8 +682,163 @@ class TaskIndexApiTest extends TestCase
                     'completed_at',
                     'related_type',
                     'related_id',
+                    'related',
                     'notes' => []
                 ]
+            ]);
+    }
+
+    public function testUserTaskDetailsRelatedCourse(): void
+    {
+        $course = Course::factory()->create();
+        $user = $this->makeStudent();
+        $task = Task::factory()->create([
+            'user_id' => $user->getKey(),
+            'related_id' => $course->getKey(),
+            'related_type' => Course::class,
+        ]);
+
+        $this->actingAs($user, 'api')
+            ->getJson('api/tasks/' . $task->getKey())
+            ->assertOk()
+            ->assertJsonStructure([
+                'data' => [
+                    'id',
+                    'title',
+                    'description',
+                    'type',
+                    'user' => [
+                        'id',
+                        'first_name',
+                        'last_name',
+                    ],
+                    'created_by' => [
+                        'id',
+                        'first_name',
+                        'last_name',
+                    ],
+                    'due_date',
+                    'completed_at',
+                    'related_type',
+                    'related_id',
+                    'related' => [
+                        'id',
+                        'title',
+                    ],
+                    'notes' => [],
+                ]
+            ])
+            ->assertJsonFragment([
+                'related' => [
+                    'id' => $course->getKey(),
+                    'title' => $course->title,
+                ],
+            ]);
+    }
+
+    public function testUserTaskDetailsRelatedLesson(): void
+    {
+        $course = Course::factory()->create();
+        $lesson = Lesson::factory()->create(['course_id' => $course->getKey()]);
+        $user = $this->makeStudent();
+        $task = Task::factory()->create([
+            'user_id' => $user->getKey(),
+            'related_id' => $lesson->getKey(),
+            'related_type' => Lesson::class
+        ]);
+
+        $this->actingAs($user, 'api')
+            ->getJson('api/tasks/' . $task->getKey())
+            ->assertOk()
+            ->assertJsonStructure([
+                'data' => [
+                    'id',
+                    'title',
+                    'description',
+                    'type',
+                    'user' => [
+                        'id',
+                        'first_name',
+                        'last_name',
+                    ],
+                    'created_by' => [
+                        'id',
+                        'first_name',
+                        'last_name',
+                    ],
+                    'due_date',
+                    'completed_at',
+                    'related_type',
+                    'related_id',
+                    'related' => [
+                        'id',
+                        'title',
+                    ],
+                    'notes' => [],
+                ]
+            ])
+            ->assertJsonFragment([
+                'related' => [
+                    'id' => $lesson->getKey(),
+                    'title' => $lesson->title,
+                    'parent_lesson_id' => $lesson->parent_lesson_id,
+                    'course_id' => $course->getKey(),
+                    'course_title' => $course->title,
+                ],
+            ]);
+    }
+
+    public function testUserTaskDetailsRelatedTopic(): void
+    {
+        $course = Course::factory()->create();
+        $lesson = Lesson::factory()->create(['course_id' => $course->getKey()]);
+        $topic = Topic::factory()->create(['lesson_id' => $lesson->getKey()]);
+        $user = $this->makeStudent();
+        $task = Task::factory()->create([
+            'user_id' => $user->getKey(),
+            'related_id' => $topic->getKey(),
+            'related_type' => Topic::class
+        ]);
+
+        $this->actingAs($user, 'api')
+            ->getJson('api/tasks/' . $task->getKey())
+            ->assertOk()
+            ->assertJsonStructure([
+                'data' => [
+                    'id',
+                    'title',
+                    'description',
+                    'type',
+                    'user' => [
+                        'id',
+                        'first_name',
+                        'last_name',
+                    ],
+                    'created_by' => [
+                        'id',
+                        'first_name',
+                        'last_name',
+                    ],
+                    'due_date',
+                    'completed_at',
+                    'related_type',
+                    'related_id',
+                    'related' => [
+                        'id',
+                        'title',
+                    ],
+                    'notes' => [],
+                ]
+            ])
+            ->assertJsonFragment([
+                'related' => [
+                    'id' => $topic->getKey(),
+                    'title' => $topic->title,
+                    'type' => $topic->type,
+                    'lesson_id' => $lesson->getKey(),
+                    'course_id' => $course->getKey(),
+                    'course_title' => $course->title,
+                ],
             ]);
     }
 
@@ -686,6 +936,7 @@ class TaskIndexApiTest extends TestCase
                     'completed_at',
                     'related_type',
                     'related_id',
+                    'related',
                     'notes' => [[
                         'id',
                         'note',
@@ -756,8 +1007,160 @@ class TaskIndexApiTest extends TestCase
                     'completed_at',
                     'related_type',
                     'related_id',
+                    'related',
                     'notes' => []
                 ]
+            ]);
+    }
+
+    public function testAdminTaskDetailsRelatedCourse(): void
+    {
+        $course = Course::factory()->create();
+        $user = $this->makeAdmin();
+        $task = Task::factory()->create([
+            'related_id' => $course->getKey(),
+            'related_type' => Course::class,
+        ]);
+
+        $this->actingAs($user, 'api')
+            ->getJson('api/admin/tasks/' . $task->getKey())
+            ->assertOk()
+            ->assertJsonStructure([
+                'data' => [
+                    'id',
+                    'title',
+                    'description',
+                    'type',
+                    'user' => [
+                        'id',
+                        'first_name',
+                        'last_name',
+                    ],
+                    'created_by' => [
+                        'id',
+                        'first_name',
+                        'last_name',
+                    ],
+                    'due_date',
+                    'completed_at',
+                    'related_type',
+                    'related_id',
+                    'related' => [
+                        'id',
+                        'title',
+                    ],
+                    'notes' => [],
+                ]
+            ])
+            ->assertJsonFragment([
+                'related' => [
+                    'id' => $course->getKey(),
+                    'title' => $course->title,
+                ],
+            ]);
+    }
+
+    public function testAdminTaskDetailsRelatedLesson(): void
+    {
+        $course = Course::factory()->create();
+        $lesson = Lesson::factory()->create(['course_id' => $course->getKey()]);
+        $user = $this->makeAdmin();
+        $task = Task::factory()->create([
+            'related_id' => $lesson->getKey(),
+            'related_type' => Lesson::class
+        ]);
+
+        $this->actingAs($user, 'api')
+            ->getJson('api/admin/tasks/' . $task->getKey())
+            ->assertOk()
+            ->assertJsonStructure([
+                'data' => [
+                    'id',
+                    'title',
+                    'description',
+                    'type',
+                    'user' => [
+                        'id',
+                        'first_name',
+                        'last_name',
+                    ],
+                    'created_by' => [
+                        'id',
+                        'first_name',
+                        'last_name',
+                    ],
+                    'due_date',
+                    'completed_at',
+                    'related_type',
+                    'related_id',
+                    'related' => [
+                        'id',
+                        'title',
+                    ],
+                    'notes' => [],
+                ]
+            ])
+            ->assertJsonFragment([
+                'related' => [
+                    'id' => $lesson->getKey(),
+                    'title' => $lesson->title,
+                    'parent_lesson_id' => $lesson->parent_lesson_id,
+                    'course_id' => $course->getKey(),
+                    'course_title' => $course->title,
+                ],
+            ]);
+    }
+
+    public function testAdminTaskDetailsRelatedTopic(): void
+    {
+        $course = Course::factory()->create();
+        $lesson = Lesson::factory()->create(['course_id' => $course->getKey()]);
+        $topic = Topic::factory()->create(['lesson_id' => $lesson->getKey()]);
+        $user = $this->makeAdmin();
+        $task = Task::factory()->create([
+            'related_id' => $topic->getKey(),
+            'related_type' => Topic::class
+        ]);
+
+        $this->actingAs($user, 'api')
+            ->getJson('api/admin/tasks/' . $task->getKey())
+            ->assertOk()
+            ->assertJsonStructure([
+                'data' => [
+                    'id',
+                    'title',
+                    'description',
+                    'type',
+                    'user' => [
+                        'id',
+                        'first_name',
+                        'last_name',
+                    ],
+                    'created_by' => [
+                        'id',
+                        'first_name',
+                        'last_name',
+                    ],
+                    'due_date',
+                    'completed_at',
+                    'related_type',
+                    'related_id',
+                    'related' => [
+                        'id',
+                        'title',
+                    ],
+                    'notes' => [],
+                ]
+            ])
+            ->assertJsonFragment([
+                'related' => [
+                    'id' => $topic->getKey(),
+                    'title' => $topic->title,
+                    'type' => $topic->type,
+                    'lesson_id' => $lesson->getKey(),
+                    'course_id' => $course->getKey(),
+                    'course_title' => $course->title,
+                ],
             ]);
     }
 
@@ -799,6 +1202,7 @@ class TaskIndexApiTest extends TestCase
                     'completed_at',
                     'related_type',
                     'related_id',
+                    'related',
                     'notes' => [[
                         'id',
                         'note',
@@ -845,6 +1249,7 @@ class TaskIndexApiTest extends TestCase
                     'completed_at',
                     'related_type',
                     'related_id',
+                    'related',
                     'notes' => [[
                         'id',
                         'note',
