@@ -131,8 +131,32 @@ class TaskIndexApiTest extends TestCase
             ],
             [
                 'filter' => [
-                    'due_date_from' => Carbon::now()->startOfDay(),
-                    'due_date_to' => Carbon::now()->endOfDay(),
+                    'related_typed_ids' => [
+                        'EscolaLms\\Courses\\Models\\Course' => [
+                            123
+                        ],
+                        'EscolaLms\\Courses\\Models\\Topic' => [
+                            456, 789
+                        ]
+                    ],
+                ],
+                'data' => (function(int $userId) {
+                    $tasks = collect();
+                    $tasks->push(Task::factory());
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Course', 'related_id' => 123, 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Topic', 'related_id' => 456, 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Topic', 'related_id' => 789, 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Topic', 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Course', 'user_id' => $userId]));
+
+                    return $tasks;
+                }),
+                'filterCount' => 3
+            ],
+            [
+                'filter' => [
+                    'due_date_from' => Carbon::now()->startOfDay()->toString(),
+                    'due_date_to' => Carbon::now()->endOfDay()->toString(),
                 ],
                 'data' => (function(int $userId) {
                     $tasks = collect();
@@ -151,7 +175,7 @@ class TaskIndexApiTest extends TestCase
             ],
             [
                 'filter' => [
-                    'due_date_from' => Carbon::now()->addDays(3)->startOfDay(),
+                    'due_date_from' => Carbon::now()->addDays(3)->startOfDay()->toString(),
                 ],
                 'data' => (function(int $userId) {
                     $tasks = collect();
@@ -170,7 +194,7 @@ class TaskIndexApiTest extends TestCase
             ],
             [
                 'filter' => [
-                    'due_date_from' => Carbon::now()->startOfDay(),
+                    'due_date_from' => Carbon::now()->startOfDay()->toString(),
                 ],
                 'data' => (function(int $userId) {
                     $tasks = collect();
@@ -187,7 +211,7 @@ class TaskIndexApiTest extends TestCase
             ],
             [
                 'filter' => [
-                    'due_date_to' => Carbon::now()->subDays(3)->startOfDay(),
+                    'due_date_to' => Carbon::now()->subDays(3)->startOfDay()->toString(),
                 ],
                 'data' => (function(int $userId) {
                     $tasks = collect();
@@ -207,7 +231,7 @@ class TaskIndexApiTest extends TestCase
             ],
             [
                 'filter' => [
-                    'due_date_to' => Carbon::now()->endOfDay(),
+                    'due_date_to' => Carbon::now()->endOfDay()->toString(),
                 ],
                 'data' => (function(int $userId) {
                     $tasks = collect();
@@ -362,6 +386,32 @@ class TaskIndexApiTest extends TestCase
             [
                 'filter' => (function($params) {
                     return [
+                        'related_typed_ids' => [
+                            'EscolaLms\\Courses\\Models\\Course' => [
+                                123
+                            ],
+                            'EscolaLms\\Courses\\Models\\Topic' => [
+                                456, 789
+                            ]
+                        ],
+                    ];
+                }),
+                'data' => (function(int $userId) {
+                    $tasks = collect();
+                    $tasks->push(Task::factory());
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Course', 'related_id' => 123]));
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Topic', 'related_id' => 456]));
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Topic', 'related_id' => 789]));
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Topic', 'user_id' => $userId]));
+                    $tasks->push(Task::factory()->state(['related_type' => 'EscolaLms\\Courses\\Models\\Course', 'user_id' => $userId]));
+
+                    return $tasks;
+                }),
+                'filterCount' => 3
+            ],
+            [
+                'filter' => (function($params) {
+                    return [
                         'user_id' => $params
                     ];
                 }),
@@ -398,8 +448,8 @@ class TaskIndexApiTest extends TestCase
             [
                 'filter' =>  (function($params) {
                     return [
-                        'due_date_from' => Carbon::now()->startOfDay(),
-                        'due_date_to' => Carbon::now()->endOfDay(),
+                        'due_date_from' => Carbon::now()->startOfDay()->toString(),
+                        'due_date_to' => Carbon::now()->endOfDay()->toString(),
                     ];
                 }),
                 'data' => (function(int $userId) {
@@ -420,7 +470,7 @@ class TaskIndexApiTest extends TestCase
             [
                 'filter' =>  (function($params) {
                     return [
-                        'due_date_from' => Carbon::now()->addDays(3)->startOfDay(),
+                        'due_date_from' => Carbon::now()->addDays(3)->startOfDay()->toString(),
                     ];
                 }),
                 'data' => (function(int $userId) {
@@ -441,7 +491,7 @@ class TaskIndexApiTest extends TestCase
             [
                 'filter' => (function($params) {
                     return [
-                        'due_date_from' => Carbon::now()->startOfDay(),
+                        'due_date_from' => Carbon::now()->startOfDay()->toString(),
                     ];
                 }),
                 'data' => (function(int $userId) {
@@ -460,7 +510,7 @@ class TaskIndexApiTest extends TestCase
             [
                 'filter' => (function($params) {
                     return [
-                        'due_date_to' => Carbon::now()->subDays(3)->startOfDay(),
+                        'due_date_to' => Carbon::now()->subDays(3)->startOfDay()->toString(),
                     ];
                 }),
                 'data' => (function(int $userId) {
@@ -482,7 +532,7 @@ class TaskIndexApiTest extends TestCase
             [
                 'filter' => (function($params) {
                     return [
-                        'due_date_to' => Carbon::now()->endOfDay(),
+                        'due_date_to' => Carbon::now()->endOfDay()->toString(),
                     ];
                 }),
                 'data' => (function(int $userId) {
