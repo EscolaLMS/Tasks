@@ -89,6 +89,18 @@
                         }
                     },
                     {
+                        "name": "related_ids[]",
+                        "in": "query",
+                        "description": "An array of related_id",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "number"
+                            }
+                        }
+                    },
+                    {
                         "name": "due_date_from",
                         "in": "query",
                         "description": "Due date from",
@@ -626,6 +638,18 @@
                         "required": false,
                         "schema": {
                             "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "related_ids[]",
+                        "in": "query",
+                        "description": "An array of related_id",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "number"
+                            }
                         }
                     },
                     {
@@ -1192,6 +1216,10 @@
                         "description": "related_id",
                         "type": "integer"
                     },
+                    "related": {
+                        "description": "realted",
+                        "type": "object"
+                    },
                     "user": {
                         "$ref": "#/components/schemas/UserResource"
                     },
@@ -1274,6 +1302,10 @@
                     "related_id": {
                         "description": "related_id",
                         "type": "integer"
+                    },
+                    "related": {
+                        "description": "realted",
+                        "type": "object"
                     },
                     "user": {
                         "$ref": "#/components/schemas/UserResource"
