@@ -89,7 +89,7 @@ class TaskDetailsResource extends JsonResource
             'completed_at' => $this->completed_at,
             'related_type' => $this->related_type,
             'related_id' => $this->related_id,
-            'related' => class_exists($resourceClass) && $this->related ? $resourceClass::make($this->related) : null,
+            'related' => class_exists($resourceClass) && class_exists($this->related_type) && $this->related ? $resourceClass::make($this->related) : null,
             'notes' => TaskNoteResource::collection($this->taskNotes)
         ];
     }
