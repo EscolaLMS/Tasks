@@ -67,9 +67,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *      ),
  * )
  *
- */
-
-/**
  * @mixin Task
  */
 class TaskResource extends JsonResource

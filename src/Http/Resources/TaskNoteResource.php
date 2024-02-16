@@ -36,9 +36,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *      ),
  * )
  *
- */
-
-/**
  * @mixin TaskNote
  */
 class TaskNoteResource extends JsonResource
